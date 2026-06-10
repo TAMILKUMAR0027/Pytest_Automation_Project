@@ -1,14 +1,18 @@
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.wait import WebDriverWait
-
-from pages.homepage import HomePage
+from actions.BaseAction import BaseAction
+from pages.HomePage import HomePage
 
 
-class HomePageAction:
+class HomePageAction(BaseAction):
+
     def __init__(self, driver):
-        self.driver = driver
-        self.wait = WebDriverWait(driver, 15)
-        self.hp = HomePage(driver)
+        super().__init__(driver)
+        self.hp = HomePage()
+
+    def clickShopByCategory(self):
+        self.click(self.hp.ShopByCategory)
+
+    def clickMonitor(self):
+        self.click(self.hp.Monitor)
 
     def click_myAcc(self):
-        self.wait.until(ec.visibility_of_element_located(self.hp.myAccLink)).click()
+        self.click(self.hp.myAccLink)

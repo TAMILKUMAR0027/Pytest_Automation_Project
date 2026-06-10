@@ -1,9 +1,11 @@
 from selenium.webdriver.common.by import By
 
+from pages.BasePage import BasePage
 
-class RegisterPage:
+
+class RegisterPage(BasePage):
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
         self.fname = (By.XPATH, "//input[@name='firstname']")
         self.lname = (By.XPATH, "//input[@name='lastname']")
         self.email = (By.XPATH, "//input[@name='email']")

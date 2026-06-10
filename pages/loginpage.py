@@ -1,7 +1,8 @@
 from selenium.webdriver.common.by import By
+from pages.BasePage import BasePage
 
 
-class LoginPage:
+class LoginPage(BasePage):
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
         self.rcontinue = (By.XPATH, "//h2[text()='New Customer']/following-sibling::a")

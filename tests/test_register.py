@@ -1,10 +1,10 @@
 import pytest
 
 from actions.accountregsuccesspageaction import RegisterAccSuccessPageAction
-from actions.homepageaction import HomePageAction
+from actions.HomePageAction import HomePageAction
 from actions.loginpageaction import LoginPageAction
 from actions.registerpageaction import RegisterPageAction
-from utils.configReader import get_config_Data
+from configuration.configReader import get_config_Data
 
 
 class TestRegister:

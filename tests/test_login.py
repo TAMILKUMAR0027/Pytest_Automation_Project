@@ -9,7 +9,7 @@ from utils.excelReader import get_data
 @pytest.mark.parametrize(
     "username,password",
     get_data(
-        "D:\Pytest_Automation_Project\Pytest_Automation_Project\data_provider\DataProvider.xlsx",
+        "data_provider/DataProvider.xlsx",
         "loginDataValid",
     ),
 )

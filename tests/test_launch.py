@@ -1,7 +1,7 @@
 import logging
 import pytest
 from pages.launch import LaunchPages
-from configuration.configReader import ConfigReader
+from utils.configReader import ConfigReader
 
 logger = logging.getLogger(__name__)
 

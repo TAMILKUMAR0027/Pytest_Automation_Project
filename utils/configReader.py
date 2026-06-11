@@ -7,7 +7,7 @@ class ConfigReader:
     Reads values from configuration/config.ini.
 
     Usage:
-        from configuration.config_reader import ConfigReader
+        from configuration.configReader import ConfigReader
         url = ConfigReader.get_url()
     """
 
@@ -46,10 +46,6 @@ class ConfigReader:
         return cls.get("browser", "mode").lower().strip()
 
     # ── Timeouts ──────────────────────────────────────────────
-    @classmethod
-    def get_implicit_wait(cls) -> int:
-        return int(cls.get("timeouts", "implicit_wait"))
-
     @classmethod
     def get_explicit_wait(cls) -> int:
         return int(cls.get("timeouts", "explicit_wait"))

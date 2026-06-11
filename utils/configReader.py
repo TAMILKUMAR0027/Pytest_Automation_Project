@@ -12,7 +12,7 @@ class ConfigReader:
     """
 
     _config = None
-    _config_path = os.path.join(os.path.dirname(__file__), "config.ini")
+    _config_path = os.path.join(os.path.dirname(__file__),r"E:\Pytest_Automation\configuration\config.ini")
 
     @classmethod
     def _load(cls):

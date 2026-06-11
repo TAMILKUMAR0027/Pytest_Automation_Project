@@ -12,3 +12,9 @@ class LoginPageAction(BaseAction):
 
     def click_register_continue(self):
         self.click(self.lp.rcontinue)
+
+    def enter_login_credentials(self, lemail, lpass):
+
+        self.send_keys(self.lp.loginEmail, lemail)
+        self.send_keys(self.lp.loginPassword, lpass)
+        self.click(self.lp.loginContinue)

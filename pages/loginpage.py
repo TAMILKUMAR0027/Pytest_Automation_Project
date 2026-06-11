@@ -5,4 +5,8 @@ from pages.BasePage import BasePage
 class LoginPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
-        self.rcontinue = (By.XPATH, "//h2[text()='New Customer']/following-sibling::a")
+
+    rcontinue = (By.XPATH, "//h2[text()='New Customer']/following-sibling::a")
+    loginEmail = (By.XPATH, "//input[@name='email']")
+    loginPassword = (By.XPATH, "//input[@name='password']")
+    loginContinue = (By.XPATH, "//input[@type='submit']")

@@ -1,10 +1,8 @@
-import pytest
-
-
 from actions.accountregsuccesspageaction import RegisterAccSuccessPageAction
-from actions.HomePageAction import HomePageAction
+from actions.homepageaction import HomePageAction
 from actions.loginpageaction import LoginPageAction
 from actions.registerpageaction import RegisterPageAction
+from utils.configReader import get_config_Data
 
 
 class TestRegister:
@@ -14,7 +12,7 @@ class TestRegister:
         lp = LoginPageAction(self.driver)
         lp.click_register_continue()
         rp = RegisterPageAction(self.driver)
-        fname = ConfigReader.get_config_Data("register credentials", "fname")
+        fname = get_config_Data("register credentials", "fname")
         lname = get_config_Data("register credentials", "lname")
         email = get_config_Data("register credentials", "email")
         telephone = get_config_Data("register credentials", "telephone")

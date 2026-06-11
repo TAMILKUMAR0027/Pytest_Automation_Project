@@ -53,3 +53,4 @@ class ConfigReader:
     @classmethod
     def get_page_load_timeout(cls) -> int:
         return int(cls.get("timeouts", "page_load_timeout"))
+

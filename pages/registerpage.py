@@ -10,5 +10,5 @@ class RegisterPage:
         self.telephone = (By.XPATH, "//input[@name='telephone']")
         self.password = (By.XPATH, "//input[@name='password']")
         self.cpassword = (By.XPATH, "//input[@name='confirm']")
-        self.privacyCB = (By.XPATH, "//input[@name='agree']")
-        self.regContinue = (By.XPATH, "//input[@type='submit']")
+        self.privacyCB = (By.XPATH, "//label[@for='input-agree']")
+        self.regContinue = (By.XPATH, "//input[@value='Continue']")

@@ -1,3 +1,5 @@
+import os
+import glob
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -8,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from configuration.configReader import ConfigReader
+from utils.configReader import ConfigReader
 from utils.loggerCreator import get_logger
 
 logger = get_logger(__name__)
@@ -20,12 +22,36 @@ class DriverSetup:
     driver = None
     wait   = None
 
+    @staticmethod
+    def _clear_stale_locks():
+        """Remove any stale webdriver-manager lock files left by crashed runs."""
+        lock_pattern = os.path.join(os.path.expanduser("~"), ".wdm", ".wdm-lock-*")
+        for lock_file in glob.glob(lock_pattern):
+            try:
+                os.remove(lock_file)
+                logger.info("Removed stale WDM lock: %s", lock_file)
+            except OSError:
+                pass
+
     @classmethod
     def setup(cls):
         """Creates WebDriver, opens the URL from config.ini, and creates WebDriverWait."""
+
+        # ── Clear stale locks ─────────────────────────────────
+        cls._clear_stale_locks()
+
         browser = ConfigReader.get_browser()
         mode    = ConfigReader.get_mode()
         url     = ConfigReader.get_url()
+
+        # ── Validate URL ──────────────────────────────────────
+        if not url or not url.startswith("http"):
+            raise ValueError(
+                f"Invalid URL from config.ini: '{url}'. "
+                "Must start with http:// or https://"
+            )
+
+        logger.info("Config → browser=%s | mode=%s | url=%s", browser, mode, url)
 
         # ── Chrome ────────────────────────────────────────────
         if browser == "chrome":
@@ -59,8 +85,7 @@ class DriverSetup:
                 "Set browser = chrome or firefox in config.ini"
             )
 
-        # ── Timeouts ──────────────────────────────────────────
-        cls.driver.implicitly_wait(ConfigReader.get_implicit_wait())
+        # ── Timeouts (no implicit wait) ───────────────────────
         cls.driver.set_page_load_timeout(ConfigReader.get_page_load_timeout())
 
         # ── Launch URL ────────────────────────────────────────
@@ -70,7 +95,7 @@ class DriverSetup:
         # ── Explicit Wait ─────────────────────────────────────
         cls.wait = WebDriverWait(cls.driver, ConfigReader.get_explicit_wait())
 
-        logger.info("Driver started → browser=%s, mode=%s", browser, mode)
+        logger.info("Driver started → browser=%s | mode=%s", browser, mode)
         return cls.driver, cls.wait
 
     @classmethod

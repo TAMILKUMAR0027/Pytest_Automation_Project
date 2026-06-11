@@ -1,3 +1,4 @@
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,8 +11,13 @@ class BaseAction:
         self.wait = WebDriverWait(driver, 15)
 
     def click(self, locator):
-        element = self.wait.until(EC.element_to_be_clickable(locator))
-        element.click()
+        try:
+            element = self.wait.until(EC.element_to_be_clickable(locator))
+            element.click()
+        except TimeoutException:
+            element = self.wait.until(EC.presence_of_element_located(locator))
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+            self.driver.execute_script("arguments[0].click();", element)
 
     def send_keys(self, locator, value):
         element = self.wait.until(EC.visibility_of_element_located(locator))

@@ -12,3 +12,5 @@ class HomePageAction(BaseAction):
         self.click(self.hp.ShopByCategory)
     def clickMonitor(self):
         self.click(self.hp.Monitor)
+    def click_myAcc(self):
+        self.click(self.hp.myAccLink)

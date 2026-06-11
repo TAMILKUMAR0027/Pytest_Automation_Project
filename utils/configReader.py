@@ -4,53 +4,100 @@ import os
 
 class ConfigReader:
     """
-    Reads values from configuration/config.ini.
+    Reads values from configuration/config.ini
 
     Usage:
-        from configuration.configReader import ConfigReader
         url = ConfigReader.get_url()
+        browser = ConfigReader.get_browser()
+        fname = ConfigReader.get_register_data("fname")
     """
 
     _config = None
-    _config_path = os.path.join(os.path.dirname(__file__), "config.ini")
+
+    _config_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "configuration",
+        "config.ini"
+    )
 
     @classmethod
     def _load(cls):
         if cls._config is None:
             cls._config = configparser.ConfigParser()
             cls._config.read(cls._config_path)
+
         return cls._config
 
     @classmethod
-    def get(cls, section: str, key: str) -> str:
+    def get(cls, section: str, key: str):
         return cls._load().get(section, key)
 
-    # ── Application ──────────────────────────────────────────
+    # ─────────────────────────────────────────────
+    # Application
+    # ─────────────────────────────────────────────
+
     @classmethod
-    def get_url(cls) -> str:
+    def get_url(cls):
         return cls.get("application", "url")
 
     @classmethod
-    def get_title(cls) -> str:
+    def get_title(cls):
         return cls.get("application", "title")
 
-    # ── Browser ───────────────────────────────────────────────
+    # ─────────────────────────────────────────────
+    # Browser
+    # ─────────────────────────────────────────────
+
     @classmethod
-    def get_browser(cls) -> str:
-        """Returns: chrome | firefox"""
+    def get_browser(cls):
         return cls.get("browser", "browser").lower().strip()
 
     @classmethod
-    def get_mode(cls) -> str:
-        """Returns: normal | headless"""
+    def get_mode(cls):
         return cls.get("browser", "mode").lower().strip()
 
-    # ── Timeouts ──────────────────────────────────────────────
+    # ─────────────────────────────────────────────
+    # Timeouts
+    # ─────────────────────────────────────────────
+
     @classmethod
-    def get_explicit_wait(cls) -> int:
+    def get_explicit_wait(cls):
         return int(cls.get("timeouts", "explicit_wait"))
 
     @classmethod
-    def get_page_load_timeout(cls) -> int:
+    def get_page_load_timeout(cls):
         return int(cls.get("timeouts", "page_load_timeout"))
 
+    # ─────────────────────────────────────────────
+    # Register Credentials
+    # ─────────────────────────────────────────────
+
+    @classmethod
+    def get_first_name(cls):
+        return cls.get("register credentials", "fname")
+
+    @classmethod
+    def get_last_name(cls):
+        return cls.get("register credentials", "lname")
+
+    @classmethod
+    def get_email(cls):
+        return cls.get("register credentials", "email")
+
+    @classmethod
+    def get_telephone(cls):
+        return cls.get("register credentials", "telephone")
+
+    @classmethod
+    def get_password(cls):
+        return cls.get("register credentials", "password")
+
+    @classmethod
+    def get_confirm_password(cls):
+        return cls.get("register credentials", "cpassword")
+
+    # Generic method
+
+    @classmethod
+    def get_register_data(cls, key):
+        return cls.get("register credentials", key)

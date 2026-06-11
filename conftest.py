@@ -42,6 +42,8 @@ class DriverSetup:
 
         browser = ConfigReader.get_browser()
         mode    = ConfigReader.get_mode()
+        if mode == "normal" and os.getenv("CI", "").lower() == "true":
+            mode = "headless"
         url     = ConfigReader.get_url()
 
         # ── Validate URL ──────────────────────────────────────

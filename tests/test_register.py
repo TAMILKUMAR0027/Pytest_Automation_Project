@@ -9,6 +9,7 @@ from utils.configReader import ConfigReader
 
 class TestRegister:
 
+    @pytest.mark.Rishwanth
     def test_validRegister(self, driver):
         drv, wait = driver
 

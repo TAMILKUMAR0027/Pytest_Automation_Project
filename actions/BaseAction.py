@@ -1,3 +1,4 @@
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -33,3 +34,4 @@ class BaseAction:
     def scroll_into_view(self, locator):
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+    

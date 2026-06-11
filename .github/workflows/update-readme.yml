@@ -1,0 +1,40 @@
+name: Update README
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Tests
+        run: |
+          pip install -r requirements.txt
+          pytest > results.txt || true
+
+      - name: Update README
+        run: |
+          echo "## Latest Execution" > temp.md
+          echo '```' >> temp.md
+          cat results.txt >> temp.md
+          echo '```' >> temp.md
+
+      - name: Commit README
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          cp temp.md README.md
+
+          git add README.md
+          git commit -m "Auto update README" || exit 0
+          git push

@@ -13,3 +13,5 @@ class FilterPage(BasePage):
     allproducts=By.XPATH,"//div[@class='product-thumb']/descendant::h4"
     inStockOption=By.XPATH,"//label[@for='mz-fss-0--1']"
     canonProduct=By.XPATH,"//a[@id='mz-product-grid-image-30-212408']//div[@class='carousel-item active']//img[@title='Canon EOS 5D']"
+    FilterSlider=By.XPATH,"//*[@id='mz-filter-panel-0-0']/div/div[1]/span[2]"
+    price=By.XPATH,"//div[@id='mz-filter-panel-0-0']//input[@placeholder='Maximum Price']"

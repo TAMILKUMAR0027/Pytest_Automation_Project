@@ -1,19 +1,15 @@
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+from actions.BaseAction import BaseAction
 from pages.accountsuccessregpage import RegAccSuccPage
 
 
-class RegisterAccSuccessPageAction:
+class RegisterAccSuccessPageAction(BaseAction):
     def __init__(self, driver):
-        self.driver = driver
-        self.wait = WebDriverWait(driver, 15)
+        super().__init__(driver)
         self.asr = RegAccSuccPage(driver)
 
     def success_register(self):
-
-        actual = self.wait.until(
-            ec.visibility_of_element_located(self.asr.regSuccess)
-        ).text
-
+        actual = self.get_text(self.asr.regSuccess)
         return "Your Account Has Been Created!" in actual

@@ -9,6 +9,7 @@ from utils.configReader import ConfigReader
 
 class TestRegister:
 
+    @pytest.mark.Rishwanth
     def test_validRegister(self, driver):
         drv, wait = driver
 
@@ -25,13 +26,7 @@ class TestRegister:
         telephone = ConfigReader.get_register_data("telephone")
         password = ConfigReader.get_register_data("password")
         cpassword = ConfigReader.get_register_data("cpassword")
-        rp.enter_register_credentials(
-            fname,
-            lname,
-            telephone,
-            password,
-            cpassword
-        )
+        rp.enter_register_credentials(fname, lname, telephone, password, cpassword)
         acpr = RegisterAccSuccessPageAction(drv)
 
         assert acpr.success_register() is True

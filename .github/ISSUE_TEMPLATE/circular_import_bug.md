@@ -1,7 +1,7 @@
 ---
-name: 
-about: 
-title: ""
+name: Circular Import Bug Report
+about: Report a circular import issue between Page Objects and Action classes
+title: "[BUG] Circular Import Issue Between Page and Action Modules"
 labels: bug, pytest, selenium, framework, jenkins, high-priority
 assignees: ''
 ---
@@ -22,8 +22,6 @@ ImportError: cannot import name '<ClassName>' from partially initialized module 
 
 ## Stack Trace
 ```text
-
-# example 
 tests/<test_file>.py
     ↓
 pages/<page_module>.py
@@ -34,10 +32,8 @@ pages/<page_module>.py
 ```
 
 ## Root Cause
-
 `pages/<page_module>.py` imports `<ActionClassName>`:
 ```python
-# example 
 from actions.<action_module> import <ActionClassName>
 ```
 
@@ -57,7 +53,6 @@ This creates a circular dependency during module initialization.
 - Remove the import of `<ActionClassName>` from `pages/<page_module>.py`.
 - Keep dependencies one-directional:
 ```text
-# example 
 Pages   → No Action imports
 Actions → Can import Pages
 Tests   → Can import Actions

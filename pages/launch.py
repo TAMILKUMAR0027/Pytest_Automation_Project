@@ -1,29 +1,25 @@
-import logging
-from selenium.webdriver.common.by import By
+"""Page object for the homepage / launch verification."""
 
-logger = logging.getLogger(__name__)
+from selenium.webdriver.common.by import By
 
 
 class LaunchPages:
-    """Page class for homepage verification"""
+    """Locators and simple accessors for the homepage."""
 
-    # Locators
     LOGO = (By.XPATH, "//img[@alt='Poco Electro']")
 
     def __init__(self, driver):
         self.driver = driver
 
-    def get_current_url(self) -> str:
-        url = self.driver.current_url
-        logger.info("Current URL: %s", url)
-        return url
+    def get_current_url(self):
+        """Return the current browser URL."""
+        return self.driver.current_url
 
-    def get_page_title(self) -> str:
-        title = self.driver.title
-        logger.info("Page Title: %s", title)
-        return title
+    def get_page_title(self):
+        """Return the current page title."""
+        return self.driver.title
 
-    def get_logo(self) -> bool:
-        is_displayed = self.driver.find_element(*self.LOGO).is_displayed()
-        logger.info("Logo displayed: %s", is_displayed)
-        return is_displayed
+    def get_logo(self):
+        """Return True if the application logo is displayed."""
+        elements = self.driver.find_elements(*self.LOGO)
+        return bool(elements) and elements[0].is_displayed()

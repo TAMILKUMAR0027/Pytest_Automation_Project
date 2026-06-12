@@ -1,9 +1,9 @@
-import logging
 import pytest
 from pages.launch import LaunchPages
 from utils.configReader import ConfigReader
+from utils.loggerCreator import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class TestHome:
@@ -15,7 +15,7 @@ class TestHome:
         Single comprehensive test for homepage.
         URL is automatically launched by the fixture.
         """
-        drv, wait = driver          # Unpack driver and wait
+        drv, wait = driver         
         lp = LaunchPages(drv)
 
         url = ConfigReader.get_url()
@@ -42,4 +42,4 @@ class TestHome:
         logger.info("Logo displayed: %s", logo_displayed)
         assert logo_displayed, "Logo is NOT displayed on the homepage"
 
-        logger.info(" All homepage verifications passed successfully!")
+        logger.info(" All homepage verifications passed successfully!") 

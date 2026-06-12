@@ -32,10 +32,11 @@ class TestFilterByManufacture:
 
         brand = ppa.getBrand()
 
-        logger.info(f"Brand Found: {brand}")
-        print("Brand:", brand)
+        logger.info("Brand Found: %s", brand)
 
         assert brand, "Brand value is empty"
+
+        logger.info("Manufacturer filter validation passed")
 
     @pytest.mark.Tamil
     def test_instock_product(self, driver):
@@ -59,11 +60,12 @@ class TestFilterByManufacture:
 
         availability = ppa.getInstock()
 
-        logger.info(f"Availability: {availability}")
-        print("Availability:", availability)
+        logger.info("Availability: %s", availability)
 
         assert "In Stock" in availability, \
             f"Expected 'In Stock' but got '{availability}'"
+
+        logger.info("In Stock filter validation passed")
 
     @pytest.mark.Tamil
     def test_filter_by_price(self, driver):
@@ -83,11 +85,12 @@ class TestFilterByManufacture:
 
         price = int(fpa.getPriceValue())
 
-        logger.info(f"Filtered Price: {price}")
-        print("Price:", price)
+        logger.info("Filtered Price: %s", price)
 
         assert price < 2000, \
             f"Price filter failed. Actual Price: {price}"
+
+        logger.info("Price filter validation passed")
 
     @pytest.mark.Tamil
     def test_filter_By_inStock_and_OutStock(self, driver):
@@ -111,11 +114,13 @@ class TestFilterByManufacture:
 
         availability = ppa.getOutStock()
 
-        logger.info(f"Availability: {availability}")
-        print("Availability:", availability)
+        logger.info("Availability: %s", availability)
 
         assert "Out Of Stock" in availability, \
             f"Expected 'Out Of Stock' but got '{availability}'"
+
+        logger.info("Out Of Stock filter validation passed")
+
     @pytest.mark.Tamil
     def test_list_of_product_By_FilterShow(self, driver):
         drv, wait = driver
@@ -128,9 +133,32 @@ class TestFilterByManufacture:
 
         logger.info("Opening Monitor Category")
         hpa.clickMonitor()
+
+        logger.info("Selecting dropdown value: 15")
         fpa.selectDropDown()
+
+        logger.info("Fetching displayed products")
         products = fpa.getAllProducts()
-        AllProducts=[]
+
+        all_products = []
+
         for product in products:
-            print(AllProducts.append(product.text))
-        print(AllProducts)
+            product_name = product.text.strip()
+
+            if product_name:
+                all_products.append(product_name)
+                logger.info("Product Found: %s", product_name)
+
+        product_count = len(all_products)
+
+        logger.info("Total Products Displayed: %s", product_count)
+
+        print("Products:", all_products)
+
+        assert product_count > 0, \
+            "No products displayed after applying filter"
+
+        assert product_count == 25, \
+            f"Expected maximum 15 products but found {product_count}"
+
+        logger.info("Product list validation passed successfully")

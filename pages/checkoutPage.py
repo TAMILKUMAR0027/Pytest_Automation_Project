@@ -9,7 +9,7 @@ class CheckoutPage:
     SVG_NAVBAR_CART = (By.XPATH, "//div[@id='entry_217825']//div[@class='icon svg-icon']")
     SIDEBAR_CHECKOUT_BTN = (By.XPATH, "//a[normalize-space()='Checkout']")
 
-    HP_PRODUCT_IMAGE = (By.XPATH,"//a[@id='mz-product-grid-image-47-212469']//div[@class='carousel-item active']//img[@title='HP LP3065']")
+    HP_PRODUCT_IMAGE = ( By.XPATH,"//img[@title='HP LP3065']")
     PRODUCT_PAGE_CHECKOUT_BTN1 = (By.XPATH,"//div[@class='entry-content content-button d-md-none d-lg-block order-1 order-md-0 order-lg-1']/child::button")
 
     SHOPPING_CART_POPUP_LINK = (By.XPATH,"//div[@id='notification-box-top']//a[contains(text(),'shopping cart')]")

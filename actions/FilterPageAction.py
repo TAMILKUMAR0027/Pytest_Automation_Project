@@ -20,3 +20,7 @@ class FilterPageAction(BaseAction):
         self.move_slider(self.fp.FilterSlider,-100)
     def getPriceValue(self):
         return self.get_input_value(self.fp.price)
+    def clickOutOfStockOption(self):
+        self.js_click(self.fp.outStockOption)
+    def clickIpodProduct(self):
+        self.click(self.fp.iPodProduct)

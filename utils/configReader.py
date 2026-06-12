@@ -116,4 +116,109 @@ class ConfigReader:
 
     @classmethod
     def get_warning(cls):
+
         return cls.get("Forget password data", "warningmsg")
+    # ─────────────────────────────────────────────
+    # Billing Data
+    # ─────────────────────────────────────────────
+
+    @classmethod
+    def get_billing_first_name(cls):
+        return cls.get("billing", "first_name")
+
+    @classmethod
+    def get_billing_last_name(cls):
+        return cls.get("billing", "last_name")
+
+    @classmethod
+    def get_billing_company(cls):
+        return cls.get("billing", "company")
+
+    @classmethod
+    def get_billing_address1(cls):
+        return cls.get("billing", "address1")
+
+    @classmethod
+    def get_billing_city(cls):
+        return cls.get("billing", "city")
+
+    @classmethod
+    def get_billing_postcode(cls):
+        return cls.get("billing", "postcode")
+
+    @classmethod
+    def get_billing_country(cls):
+        return cls.get("billing", "country")
+
+    @classmethod
+    def get_billing_region(cls):
+        return cls.get("billing", "region")
+
+    # ─────────────────────────────────────────────
+    # Registration Data
+    # ─────────────────────────────────────────────
+
+    @classmethod
+    def get_reg_first_name(cls):
+        return cls.get("registration", "reg_first_name")
+
+    @classmethod
+    def get_reg_last_name(cls):
+        return cls.get("registration", "reg_last_name")
+
+    @classmethod
+    def get_reg_email(cls):
+        return cls.get("registration", "reg_email")
+
+    @classmethod
+    def get_reg_telephone(cls):
+        return cls.get("registration", "reg_telephone")
+
+    @classmethod
+    def get_reg_password(cls):
+        return cls.get("registration", "reg_password")
+
+    @classmethod
+    def get_reg_confirm_password(cls):
+        return cls.get("registration", "reg_confirm_password")
+
+    @classmethod
+    def get_reg_company(cls):
+        return cls.get("registration", "reg_company")
+
+    @classmethod
+    def get_reg_address1(cls):
+        return cls.get("registration", "reg_address1")
+
+    @classmethod
+    def get_reg_address2(cls):
+        return cls.get("registration", "reg_address2")
+
+    @classmethod
+    def get_reg_city(cls):
+        return cls.get("registration", "reg_city")
+
+    @classmethod
+    def get_reg_postcode(cls):
+        return cls.get("registration", "reg_postcode")
+
+    @classmethod
+    def get_reg_country(cls):
+        return cls.get("registration", "reg_country")
+
+    @classmethod
+    def get_reg_region(cls):
+        return cls.get("registration", "reg_region")
+
+    # ─────────────────────────────────────────────
+    # Messages
+    # ─────────────────────────────────────────────
+
+    @classmethod
+    def get_login_success_message(cls):
+        return cls.get("messages", "login_success")
+
+    @classmethod
+    def get_expected_order_message(cls):
+        return cls.get("messages", "expected_order_msg")
+

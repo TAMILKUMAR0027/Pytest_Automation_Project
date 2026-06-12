@@ -18,8 +18,8 @@ def get_data(path, sheet_name):
 
 
 def get_registration_data(path, sheet_name):
-    Workbook = openpyxl.load_workbook(path)
-    sheet = Workbook[sheet_name]
+    wb = openpyxl.load_workbook(path)
+    sheet = wb[sheet_name]
 
     return {
         "firstname": sheet.cell(2, 1).value,

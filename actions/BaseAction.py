@@ -2,6 +2,7 @@
 
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
@@ -98,3 +99,11 @@ class BaseAction:
 
     def _js_click_element(self, element):
         self.driver.execute_script("arguments[0].click();", element)
+    def select_by_visible_text(self, locator, text):
+        element = self.wait.until(ec.element_to_be_clickable(locator))
+        Select(element).select_by_visible_text(text)
+    def find_elements(self, locator):
+   
+     return self.wait.until(
+        ec.presence_of_all_elements_located(locator)
+        )

@@ -116,3 +116,21 @@ class TestFilterByManufacture:
 
         assert "Out Of Stock" in availability, \
             f"Expected 'Out Of Stock' but got '{availability}'"
+    @pytest.mark.Tamil
+    def test_list_of_product_By_FilterShow(self, driver):
+        drv, wait = driver
+
+        hpa = HomePageAction(drv)
+        fpa = FilterPageAction(drv)
+
+        logger.info("Opening Shop By Category")
+        hpa.clickShopByCategory()
+
+        logger.info("Opening Monitor Category")
+        hpa.clickMonitor()
+        fpa.selectDropDown()
+        products = fpa.getAllProducts()
+        AllProducts=[]
+        for product in products:
+            print(AllProducts.append(product.text))
+        print(AllProducts)

@@ -1,3 +1,5 @@
+import pytest
+
 from actions.checkoutAction import CheckoutAction
 from utils.configReader import ConfigReader
 

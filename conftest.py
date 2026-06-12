@@ -42,121 +42,181 @@ class DriverSetup:
 
     @classmethod
     def setup(cls):
+        """Creates WebDriver, opens URL, and returns driver + wait."""
 
         cls._clear_stale_locks()
 
         browser = ConfigReader.get_browser().lower()
         mode = ConfigReader.get_mode().lower()
 
-        # Force headless in CI
-        if os.getenv("CI", "").lower() == "true":
+        if mode == "normal" and os.getenv("CI", "").lower() == "true":
             mode = "headless"
 
         url = ConfigReader.get_url()
 
         if not url or not url.startswith(("http://", "https://")):
-            raise ValueError(f"Invalid URL: {url}")
+            raise ValueError(
+                f"Invalid URL from config.ini: '{url}'"
+            )
 
-        logger.info(f"Config → browser={browser} | mode={mode} | url={url}")
+        logger.info(
+            f"Config → browser={browser} | mode={mode} | url={url}"
+        )
 
-        # =========================
-        # CHROME SETUP (FIXED)
-        # =========================
+        # =====================================================
+        # CHROME
+        # =====================================================
+
         if browser == "chrome":
 
             options = ChromeOptions()
 
-            # ===== CRITICAL CI STABILITY FLAGS =====
+            # Browser Stability
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--disable-gpu")
             options.add_argument("--remote-allow-origins=*")
+
+            # Disable Notifications & Popups
             options.add_argument("--disable-notifications")
             options.add_argument("--disable-popup-blocking")
 
-            # prevent automation detection instability
-            options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            options.add_experimental_option("useAutomationExtension", False)
+            # Disable Automation Banner
+            options.add_experimental_option(
+                "excludeSwitches",
+                ["enable-automation"]
+            )
 
+            options.add_experimental_option(
+                "useAutomationExtension",
+                False
+            )
+
+            # Chrome Preferences
             prefs = {
                 "credentials_enable_service": False,
                 "profile.password_manager_enabled": False,
+                "profile.password_manager_leak_detection": False,
                 "profile.default_content_setting_values.notifications": 2
             }
+
             options.add_experimental_option("prefs", prefs)
 
-            # ===== HEADLESS / NORMAL MODE =====
+            # Headless / Normal Mode
             if mode == "headless":
                 options.add_argument("--headless=new")
                 options.add_argument("--window-size=1920,1080")
-                options.add_argument("--remote-debugging-port=9222")
             else:
                 options.add_argument("--start-maximized")
 
-            # start driver
-            service = ChromeService(ChromeDriverManager().install())
+            cls.driver = webdriver.Chrome(
+                service=ChromeService(
+                    ChromeDriverManager().install()
+                ),
+                options=options
+            )
 
-            try:
-                cls.driver = webdriver.Chrome(service=service, options=options)
-                logger.info("Chrome browser launched successfully")
-            except Exception as e:
-                logger.error(f"Chrome launch failed: {e}")
-                raise
+            logger.info("Chrome Browser Launched Successfully")
 
-        # =========================
-        # FIREFOX SETUP
-        # =========================
+        # =====================================================
+        # FIREFOX
+        # =====================================================
+
         elif browser == "firefox":
 
             options = FirefoxOptions()
 
             if mode == "headless":
                 options.add_argument("--headless")
+                options.add_argument("--width=1920")
+                options.add_argument("--height=1080")
 
-            service = FirefoxService(GeckoDriverManager().install())
-
-            cls.driver = webdriver.Firefox(service=service, options=options)
+            cls.driver = webdriver.Firefox(
+                service=FirefoxService(
+                    GeckoDriverManager().install()
+                ),
+                options=options
+            )
 
             if mode != "headless":
                 cls.driver.maximize_window()
 
-            logger.info("Firefox browser launched successfully")
+            logger.info("Firefox Browser Launched Successfully")
+
+        # =====================================================
+        # INVALID BROWSER
+        # =====================================================
 
         else:
-            raise ValueError(f"Unsupported browser: {browser}")
+            logger.error(f"Invalid Browser Name: {browser}")
 
-        # =========================
+            raise ValueError(
+                f"Unsupported browser '{browser}'. "
+                f"Use chrome or firefox."
+            )
+
+        # =====================================================
         # COMMON SETTINGS
-        # =========================
-        cls.driver.set_page_load_timeout(ConfigReader.get_page_load_timeout())
+        # =====================================================
+
+        # Optional (recommended to keep disabled if using explicit waits)
+        # cls.driver.implicitly_wait(10)
+
+        cls.driver.set_page_load_timeout(
+            ConfigReader.get_page_load_timeout()
+        )
+
         cls.driver.set_script_timeout(30)
 
-        # open URL
+        if mode != "headless":
+            cls.driver.maximize_window()
+
+        # Launch URL
         logger.info(f"Launching URL: {url}")
         cls.driver.get(url)
 
-        # explicit wait
-        cls.wait = WebDriverWait(cls.driver, ConfigReader.get_explicit_wait())
+        # Explicit Wait
+        cls.wait = WebDriverWait(
+            cls.driver,
+            ConfigReader.get_explicit_wait()
+        )
+
+        logger.info(
+            f"Driver started → browser={browser} | mode={mode}"
+        )
 
         return cls.driver, cls.wait
 
     @classmethod
     def teardown(cls):
+        """Quit driver."""
+
         try:
             if cls.driver:
-                logger.info("Closing browser")
+                logger.info("Quitting driver.")
                 cls.driver.quit()
+
                 cls.driver = None
                 cls.wait = None
+
         except Exception as e:
-            logger.error(f"Error closing browser: {e}")
+            logger.error(
+                f"Error while closing browser: {str(e)}"
+            )
 
 
-# =========================
+# ============================================================
 # PYTEST FIXTURE
-# =========================
+# ============================================================
+
 @pytest.fixture(scope="function")
 def driver(request):
+    """
+    Usage:
+
+    def test_example(driver):
+        drv, wait = driver
+    """
 
     drv, wait = DriverSetup.setup()
 

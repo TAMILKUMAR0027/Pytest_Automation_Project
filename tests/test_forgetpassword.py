@@ -25,7 +25,7 @@ class TestForgetpassword:
         fpa.clickMyaccount()
         fpa.clicklogin()
         fpa.clickForgetpassword()
-        fpa.enterEmail()
+        fpa.enterInvalidEmail()
         fpa.clicksubmit()
        
         fpa.warningmessage()

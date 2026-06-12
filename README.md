@@ -144,7 +144,7 @@ rootdir: /home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project
 configfile: pytest.ini
 testpaths: tests
 plugins: rerunfailures-16.3, soft-assertions-0.1.2, xdist-3.8.0, allure-pytest-2.16.0, metadata-3.1.1, html-4.2.0, ordering-0.6, ast-transformer-1.0.3
-collected 5 items / 1 error
+collected 7 items / 1 error
 
 ==================================== ERRORS ====================================
 ___________________ ERROR collecting tests/test_wishlist.py ____________________
@@ -162,5 +162,5 @@ E   ModuleNotFoundError: No module named 'utils.base_action'
 =========================== short test summary info ============================
 ERROR tests/test_wishlist.py
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
-=============================== 1 error in 0.11s ===============================
+=============================== 1 error in 0.12s ===============================
 ```

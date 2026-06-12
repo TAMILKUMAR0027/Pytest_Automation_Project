@@ -24,3 +24,10 @@ class FilterPageAction(BaseAction):
         self.js_click(self.fp.outStockOption)
     def clickIpodProduct(self):
         self.click(self.fp.iPodProduct)
+    def selectDropDown(self, value="25"):
+     self.select_by_visible_text(
+        self.fp.filterDropDown,
+        str(value)
+    )
+    def getAllProducts(self):
+     return self.find_elements(self.fp.allProducts)

@@ -15,18 +15,16 @@ from webdriver_manager.firefox import GeckoDriverManager
 from utils.configReader import ConfigReader
 from utils.loggerCreator import get_logger
 
+
 logger = get_logger(__name__)
 
 
 class DriverSetup:
-    """Centralized WebDriver setup."""
-
     driver = None
     wait = None
 
     @staticmethod
     def _clear_stale_locks():
-        """Remove stale webdriver-manager lock files."""
         lock_pattern = os.path.join(
             os.path.expanduser("~"),
             ".wdm",
@@ -42,46 +40,42 @@ class DriverSetup:
 
     @classmethod
     def setup(cls):
-        """Creates WebDriver, opens URL, and returns driver + wait."""
-
         cls._clear_stale_locks()
 
         browser = ConfigReader.get_browser().lower()
         mode = ConfigReader.get_mode().lower()
-
-        if mode == "normal" and os.getenv("CI", "").lower() == "true":
-            mode = "headless"
-
         url = ConfigReader.get_url()
 
+        if os.getenv("CI", "").lower() == "true":
+            mode = "headless"
+
         if not url or not url.startswith(("http://", "https://")):
-            raise ValueError(
-                f"Invalid URL from config.ini: '{url}'"
-            )
+            raise ValueError(f"Invalid URL from config.ini: '{url}'")
 
         logger.info(
             f"Config → browser={browser} | mode={mode} | url={url}"
         )
 
-        # =====================================================
-        # CHROME
-        # =====================================================
-
         if browser == "chrome":
-
             options = ChromeOptions()
 
-            # Browser Stability
+            if mode == "headless":
+                options.add_argument("--headless=new")
+                options.add_argument("--window-size=1920,1080")
+            else:
+                options.add_argument("--start-maximized")
+
+            options.add_argument("--disable-gpu")
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--disable-gpu")
             options.add_argument("--remote-allow-origins=*")
-
-            # Disable Notifications & Popups
+            options.add_argument("--remote-debugging-port=9222")
             options.add_argument("--disable-notifications")
             options.add_argument("--disable-popup-blocking")
+            options.add_argument("--disable-extensions")
+            options.add_argument("--disable-infobars")
+            options.add_argument("--disable-blink-features=AutomationControlled")
 
-            # Disable Automation Banner
             options.add_experimental_option(
                 "excludeSwitches",
                 ["enable-automation"]
@@ -92,7 +86,6 @@ class DriverSetup:
                 False
             )
 
-            # Chrome Preferences
             prefs = {
                 "credentials_enable_service": False,
                 "profile.password_manager_enabled": False,
@@ -102,28 +95,18 @@ class DriverSetup:
 
             options.add_experimental_option("prefs", prefs)
 
-            # Headless / Normal Mode
-            if mode == "headless":
-                options.add_argument("--headless=new")
-                options.add_argument("--window-size=1920,1080")
-            else:
-                options.add_argument("--start-maximized")
+            service = ChromeService(
+                ChromeDriverManager().install()
+            )
 
             cls.driver = webdriver.Chrome(
-                service=ChromeService(
-                    ChromeDriverManager().install()
-                ),
+                service=service,
                 options=options
             )
 
             logger.info("Chrome Browser Launched Successfully")
 
-        # =====================================================
-        # FIREFOX
-        # =====================================================
-
         elif browser == "firefox":
-
             options = FirefoxOptions()
 
             if mode == "headless":
@@ -131,10 +114,12 @@ class DriverSetup:
                 options.add_argument("--width=1920")
                 options.add_argument("--height=1080")
 
+            service = FirefoxService(
+                GeckoDriverManager().install()
+            )
+
             cls.driver = webdriver.Firefox(
-                service=FirefoxService(
-                    GeckoDriverManager().install()
-                ),
+                service=service,
                 options=options
             )
 
@@ -143,24 +128,11 @@ class DriverSetup:
 
             logger.info("Firefox Browser Launched Successfully")
 
-        # =====================================================
-        # INVALID BROWSER
-        # =====================================================
-
         else:
             logger.error(f"Invalid Browser Name: {browser}")
-
             raise ValueError(
-                f"Unsupported browser '{browser}'. "
-                f"Use chrome or firefox."
+                f"Unsupported browser '{browser}'. Use chrome or firefox."
             )
-
-        # =====================================================
-        # COMMON SETTINGS
-        # =====================================================
-
-        # Optional (recommended to keep disabled if using explicit waits)
-        # cls.driver.implicitly_wait(10)
 
         cls.driver.set_page_load_timeout(
             ConfigReader.get_page_load_timeout()
@@ -171,11 +143,9 @@ class DriverSetup:
         if mode != "headless":
             cls.driver.maximize_window()
 
-        # Launch URL
         logger.info(f"Launching URL: {url}")
         cls.driver.get(url)
 
-        # Explicit Wait
         cls.wait = WebDriverWait(
             cls.driver,
             ConfigReader.get_explicit_wait()
@@ -189,35 +159,19 @@ class DriverSetup:
 
     @classmethod
     def teardown(cls):
-        """Quit driver."""
-
         try:
             if cls.driver:
                 logger.info("Quitting driver.")
                 cls.driver.quit()
-
                 cls.driver = None
                 cls.wait = None
 
         except Exception as e:
-            logger.error(
-                f"Error while closing browser: {str(e)}"
-            )
+            logger.error(f"Error while closing browser: {str(e)}")
 
-
-# ============================================================
-# PYTEST FIXTURE
-# ============================================================
 
 @pytest.fixture(scope="function")
 def driver(request):
-    """
-    Usage:
-
-    def test_example(driver):
-        drv, wait = driver
-    """
-
     drv, wait = DriverSetup.setup()
 
     if request.cls is not None:

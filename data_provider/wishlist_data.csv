@@ -1,0 +1,6 @@
+scenario,productName,section,expectedPage
+AddSingleProduct,iMac,Top Products,My Wish List
+AddMultipleProduct1,Apple Cinema 30,Top Collection,My Wish List
+AddMultipleProduct2,iPod Nano,Top Collection,My Wish List
+RemoveProduct1,iPod Nano,,
+AddSearchProduct,iPod Shuffle,,My Wish List

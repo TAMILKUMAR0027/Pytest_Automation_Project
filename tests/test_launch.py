@@ -9,8 +9,7 @@ logger = logging.getLogger(__name__)
 class TestHome:
 
     @pytest.mark.smoke
-    @pytest.mark.sanity
-    @pytest.mark.regression
+    @pytest.mark.Prasanna
     def test_homepage_verification(self, driver):
         """
         Single comprehensive test for homepage.

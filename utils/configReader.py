@@ -15,9 +15,7 @@ class ConfigReader:
     _config = None
 
     _config_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        "configuration",
-        "config.ini"
+        os.path.dirname(os.path.dirname(__file__)), "configuration", "config.ini"
     )
 
     @classmethod
@@ -101,6 +99,7 @@ class ConfigReader:
     @classmethod
     def get_register_data(cls, key):
         return cls.get("register credentials", key)
+
     
     #ForgetPassword credential
 

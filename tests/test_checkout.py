@@ -1,7 +1,8 @@
+import pytest
 from actions.checkoutAction import CheckoutAction
 from utils.configReader import ConfigReader
 
-
+@pytest.mark.Samiha
 class TestCheckout:
 
     def test_guest_checkout_with_new_address_cod(self, driver):

@@ -1,29 +1,23 @@
-import logging
-from selenium.webdriver.common.by import By
+"""Test suite for verifying application launch / homepage state."""
 
-logger = logging.getLogger(__name__)
+import pytest
+
+from actions.launch_actions import LaunchActions
+from utils.loggerCreator import get_logger
+
+logger = get_logger(__name__)
 
 
-class LaunchPages:
-    """Page class for homepage verification"""
+class TestHome:
+    """Smoke tests for the homepage after automatic launch."""
 
-    # Locators
-    LOGO = (By.XPATH, "//img[@alt='Poco Electro']")
+    @pytest.mark.smoke
+    @pytest.mark.Prasanna
+    def test_homepage_verification(self, driver):
+        """Single comprehensive test for homepage. URL is automatically launched by the fixture."""
+        drv, _ = driver
 
-    def __init__(self, driver):
-        self.driver = driver
+        launch_actions = LaunchActions(drv)
+        logger.info("Verifying homepage after automatic launch...")
 
-    def get_current_url(self) -> str:
-        url = self.driver.current_url
-        logger.info("Current URL: %s", url)
-        return url
-
-    def get_page_title(self) -> str:
-        title = self.driver.title
-        logger.info("Page Title: %s", title)
-        return title
-
-    def get_logo(self) -> bool:
-        is_displayed = self.driver.find_element(*self.LOGO).is_displayed()
-        logger.info("Logo displayed: %s", is_displayed)
-        return is_displayed
+        launch_actions.verify_homepage()

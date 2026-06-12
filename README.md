@@ -144,23 +144,25 @@ rootdir: /home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project
 configfile: pytest.ini
 testpaths: tests
 plugins: rerunfailures-16.3, soft-assertions-0.1.2, xdist-3.8.0, allure-pytest-2.16.0, metadata-3.1.1, html-4.2.0, ordering-0.6, ast-transformer-1.0.3
-collected 8 items / 1 error
+collected 13 items / 1 error
 
 ==================================== ERRORS ====================================
-___________________ ERROR collecting tests/test_wishlist.py ____________________
-ImportError while importing test module '/home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project/tests/test_wishlist.py'.
+____________________ ERROR collecting tests/test_launch.py _____________________
+ImportError while importing test module '/home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project/tests/test_launch.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 /usr/lib/python3.12/importlib/__init__.py:90: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests/test_wishlist.py:5: in <module>
-    from actions.wishlist_actions import WishListActions
-actions/wishlist_actions.py:10: in <module>
-    from utils.base_action import BaseAction
-E   ModuleNotFoundError: No module named 'utils.base_action'
+tests/test_launch.py:3: in <module>
+    from pages.launch import LaunchPages
+pages/launch.py:5: in <module>
+    from actions.launch_actions import LaunchActions
+actions/launch_actions.py:3: in <module>
+    from pages.launch import LaunchPages
+E   ImportError: cannot import name 'LaunchPages' from partially initialized module 'pages.launch' (most likely due to a circular import) (/home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project/pages/launch.py)
 =========================== short test summary info ============================
-ERROR tests/test_wishlist.py
+ERROR tests/test_launch.py
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
-=============================== 1 error in 0.23s ===============================
+=============================== 1 error in 0.21s ===============================
 ```

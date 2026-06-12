@@ -1,8 +1,12 @@
-__pycache__
-.pytest_cache
-reports
-logs
+__pycache__/
+*.pyc
+.pytest_cache/
+reports/
+logs/
+.env
 *.log
 *.html
 *.xml
 POM
+venv/
+.venv/

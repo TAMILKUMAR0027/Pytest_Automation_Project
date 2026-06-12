@@ -9,3 +9,7 @@ class HomePage(BasePage):
 
     ShopByCategory=By.XPATH,"//a[normalize-space()='Shop by Category']"
     Monitor=By.XPATH,"//span[normalize-space()='Desktops and Monitors']"
+    myAccLink = (
+            By.XPATH,
+            "//div[@class='info']/preceding-sibling::i[@class='icon fas fa-user']",
+        )

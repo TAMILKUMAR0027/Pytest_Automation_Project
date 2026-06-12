@@ -52,3 +52,4 @@ class CheckoutPage:
 
     CONFIRM_MESSAGE = (By.XPATH, "//h1[@class='page-title mb-3']")
     EMPTY_CART_MESSAGE = (By.XPATH, "//div[@id='content']//p")
+

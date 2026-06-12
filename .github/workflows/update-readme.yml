@@ -1,0 +1,56 @@
+name: Update README
+on:
+  push:
+    branches:
+      - main
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Tests
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pytest > results.txt || true
+
+      - name: Update README
+        run: |
+          python - <<'EOF'
+          import re
+
+          with open("results.txt") as f:
+              results = f.read()
+
+          with open("README.md") as f:
+              readme = f.read()
+
+          new_section = "## Latest Execution\n```\n" + results + "```\n"
+
+          if "## Latest Execution" in readme:
+              # Replace existing section
+              readme = re.sub(
+                  r"## Latest Execution\n```.*?```\n",
+                  new_section,
+                  readme,
+                  flags=re.DOTALL
+              )
+          else:
+              # Append new section at the end
+              readme = readme.rstrip() + "\n\n" + new_section
+
+          with open("README.md", "w") as f:
+              f.write(readme)
+          EOF
+
+      - name: Commit README
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add README.md
+          git commit -m "Auto update README with latest test results" || exit 0
+          git push

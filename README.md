@@ -144,7 +144,7 @@ rootdir: /home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project
 configfile: pytest.ini
 testpaths: tests
 plugins: rerunfailures-16.3, soft-assertions-0.1.2, xdist-3.8.0, allure-pytest-2.16.0, metadata-3.1.1, html-4.2.0, ordering-0.6, ast-transformer-1.0.3
-collected 18 items / 1 error
+collected 19 items / 1 error
 
 ==================================== ERRORS ====================================
 _____________________ ERROR collecting tests/test_login.py _____________________
@@ -170,5 +170,5 @@ E   FileNotFoundError: [Errno 2] No such file or directory: 'data_provider/DataP
 =========================== short test summary info ============================
 ERROR tests/test_login.py - FileNotFoundError: [Errno 2] No such file or directory: 'data_provider/DataProvider.xlsx'
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
-=============================== 1 error in 0.26s ===============================
+=============================== 1 error in 0.28s ===============================
 ```

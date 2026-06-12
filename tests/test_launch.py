@@ -1,9 +1,9 @@
-import logging
 import pytest
 from pages.launch import LaunchPages
 from utils.configReader import ConfigReader
+from utils.loggerCreator import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class TestHome:

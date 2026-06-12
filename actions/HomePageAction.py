@@ -13,11 +13,6 @@ class HomePageAction(BaseAction):
 
     def clickMonitor(self):
         self.click(self.hp.Monitor)
-<<<<<<< Updated upstream
-    def click_myAcc(self):
-        self.click(self.hp.myAccLink)
-=======
 
     def click_myAcc(self):
         self.click(self.hp.myAccLink)
->>>>>>> Stashed changes

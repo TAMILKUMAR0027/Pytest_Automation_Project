@@ -1,5 +1,8 @@
 import os
 import glob
+import subprocess
+import platform
+
 import pytest
 
 from selenium import webdriver
@@ -14,7 +17,6 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 from utils.configReader import ConfigReader
 from utils.loggerCreator import get_logger
-
 
 logger = get_logger(__name__)
 
@@ -34,13 +36,36 @@ class DriverSetup:
         for lock_file in glob.glob(lock_pattern):
             try:
                 os.remove(lock_file)
-                logger.info(f"Removed stale WDM lock: {lock_file}")
+                logger.info(f"Removed stale lock file: {lock_file}")
             except OSError:
                 pass
+
+    @staticmethod
+    def _kill_stale_processes():
+        try:
+            if platform.system().lower() == "windows":
+                subprocess.run(
+                    ["taskkill", "/F", "/IM", "chrome.exe"],
+                    capture_output=True
+                )
+                subprocess.run(
+                    ["taskkill", "/F", "/IM", "chromedriver.exe"],
+                    capture_output=True
+                )
+
+                logger.info(
+                    "Killed stale Chrome and ChromeDriver processes"
+                )
+
+        except Exception as e:
+            logger.warning(
+                f"Unable to kill stale processes: {str(e)}"
+            )
 
     @classmethod
     def setup(cls):
         cls._clear_stale_locks()
+        cls._kill_stale_processes()
 
         browser = ConfigReader.get_browser().lower()
         mode = ConfigReader.get_mode().lower()
@@ -50,31 +75,46 @@ class DriverSetup:
             mode = "headless"
 
         if not url or not url.startswith(("http://", "https://")):
-            raise ValueError(f"Invalid URL from config.ini: '{url}'")
+            raise ValueError(
+                f"Invalid URL in config.ini: {url}"
+            )
 
         logger.info(
-            f"Config → browser={browser} | mode={mode} | url={url}"
+            f"Config -> browser={browser} | mode={mode} | url={url}"
         )
 
+        # ======================
+        # CHROME
+        # ======================
         if browser == "chrome":
+
             options = ChromeOptions()
 
             if mode == "headless":
                 options.add_argument("--headless=new")
                 options.add_argument("--window-size=1920,1080")
+
             else:
                 options.add_argument("--start-maximized")
 
+            # Stability options
             options.add_argument("--disable-gpu")
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--remote-allow-origins=*")
-            options.add_argument("--remote-debugging-port=9222")
+            options.add_argument("--disable-software-rasterizer")
+            options.add_argument("--disable-background-networking")
+            options.add_argument("--disable-renderer-backgrounding")
             options.add_argument("--disable-notifications")
             options.add_argument("--disable-popup-blocking")
             options.add_argument("--disable-extensions")
             options.add_argument("--disable-infobars")
-            options.add_argument("--disable-blink-features=AutomationControlled")
+            options.add_argument(
+                "--disable-blink-features=AutomationControlled"
+            )
+
+            # IMPORTANT:
+            # Removed fixed debugging port
+            # options.add_argument("--remote-debugging-port=9222")
 
             options.add_experimental_option(
                 "excludeSwitches",
@@ -93,20 +133,33 @@ class DriverSetup:
                 "profile.default_content_setting_values.notifications": 2
             }
 
-            options.add_experimental_option("prefs", prefs)
-
-            service = ChromeService(
-                ChromeDriverManager().install()
+            options.add_experimental_option(
+                "prefs",
+                prefs
             )
+
+            driver_path = ChromeDriverManager().install()
+
+            logger.info(
+                f"ChromeDriver downloaded at: {driver_path}"
+            )
+
+            service = ChromeService(driver_path)
 
             cls.driver = webdriver.Chrome(
                 service=service,
                 options=options
             )
 
-            logger.info("Chrome Browser Launched Successfully")
+            logger.info(
+                "Chrome browser launched successfully"
+            )
 
+        # ======================
+        # FIREFOX
+        # ======================
         elif browser == "firefox":
+
             options = FirefoxOptions()
 
             if mode == "headless":
@@ -126,12 +179,13 @@ class DriverSetup:
             if mode != "headless":
                 cls.driver.maximize_window()
 
-            logger.info("Firefox Browser Launched Successfully")
+            logger.info(
+                "Firefox browser launched successfully"
+            )
 
         else:
-            logger.error(f"Invalid Browser Name: {browser}")
             raise ValueError(
-                f"Unsupported browser '{browser}'. Use chrome or firefox."
+                f"Unsupported browser: {browser}"
             )
 
         cls.driver.set_page_load_timeout(
@@ -144,6 +198,7 @@ class DriverSetup:
             cls.driver.maximize_window()
 
         logger.info(f"Launching URL: {url}")
+
         cls.driver.get(url)
 
         cls.wait = WebDriverWait(
@@ -152,7 +207,8 @@ class DriverSetup:
         )
 
         logger.info(
-            f"Driver started → browser={browser} | mode={mode}"
+            f"Driver started successfully -> "
+            f"browser={browser}, mode={mode}"
         )
 
         return cls.driver, cls.wait
@@ -161,20 +217,25 @@ class DriverSetup:
     def teardown(cls):
         try:
             if cls.driver:
-                logger.info("Quitting driver.")
+                logger.info("Closing browser")
+
                 cls.driver.quit()
+
                 cls.driver = None
                 cls.wait = None
 
         except Exception as e:
-            logger.error(f"Error while closing browser: {str(e)}")
+            logger.error(
+                f"Error while closing browser: {str(e)}"
+            )
 
 
 @pytest.fixture(scope="function")
 def driver(request):
+
     drv, wait = DriverSetup.setup()
 
-    if request.cls is not None:
+    if request.cls:
         request.cls.driver = drv
         request.cls.wait = wait
 

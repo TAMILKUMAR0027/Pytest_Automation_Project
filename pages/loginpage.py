@@ -6,6 +6,7 @@ class LoginPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
+    # login
     rcontinue = (By.XPATH, "//h2[text()='New Customer']/following-sibling::a")
     loginEmail = (By.XPATH, "//input[@name='email']")
     loginPassword = (By.XPATH, "//input[@name='password']")

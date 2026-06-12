@@ -8,3 +8,4 @@ class ProductPage(BasePage):
         super().__init__(driver)
     brand=By.XPATH,"//ul[@class='list-unstyled m-0']//a[contains(text(),'Apple')]"
     instock=By.XPATH,"//span[@class='badge badge-success']"
+    outStock=By.XPATH,"//span[@class='badge badge-danger']"

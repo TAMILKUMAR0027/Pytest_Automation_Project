@@ -152,13 +152,13 @@ tests/test_forgetpassword.py ..                                          [ 50%]
 tests/test_launch.py .                                                   [ 55%]
 tests/test_login.py .                                                    [ 61%]
 tests/test_register.py .                                                 [ 66%]
-tests/test_wishlist.py ......                                            [100%]
+tests/test_wishlist.py ..F...                                            [100%]
 
 =================================== FAILURES ===================================
 ____________ TestCheckout.test_guest_checkout_with_new_address_cod _____________
 
-self = <tests.test_checkout.TestCheckout object at 0x7f81d04d3020>
-driver = (<selenium.webdriver.chrome.webdriver.WebDriver (session="055167e48aa94bf2fa4a822f637ccee2")>, <selenium.webdriver.support.wait.WebDriverWait (session="055167e48aa94bf2fa4a822f637ccee2")>)
+self = <tests.test_checkout.TestCheckout object at 0x7fdc266e2f30>
+driver = (<selenium.webdriver.chrome.webdriver.WebDriver (session="1bd0283aff665aee7e79f415f9245c04")>, <selenium.webdriver.support.wait.WebDriverWait (session="1bd0283aff665aee7e79f415f9245c04")>)
 
     def test_guest_checkout_with_new_address_cod(self, driver):
     
@@ -182,160 +182,35 @@ driver = (<selenium.webdriver.chrome.webdriver.WebDriver (session="055167e48aa94
         action.click_same_billing_address()
     
         action.select_flat_rate()
->       action.select_cash_on_delivery()
+        action.select_cash_on_delivery()
+    
+        action.click_terms_and_conditions()
+        action.continue_checkout()
+    
+>       assert action.is_order_placed_successfully()
+E       assert False
+E        +  where False = is_order_placed_successfully()
+E        +    where is_order_placed_successfully = <actions.checkoutAction.CheckoutAction object at 0x7fdc265cab70>.is_order_placed_successfully
 
-tests/test_checkout.py:30: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-actions/checkoutAction.py:86: in select_cash_on_delivery
-    self.click(self.cp.COD_LABEL)
-actions/BaseAction.py:23: in click
-    element.click()
-../../../.local/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:114: in click
-    self._execute(Command.CLICK_ELEMENT)
-../../../.local/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:508: in _execute
-    return self._parent.execute(command, params)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../../../.local/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:468: in execute
-    self.error_handler.check_response(response)
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-self = <selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x7f81ca9b4500>
-response = {'status': 404, 'value': '{"value":{"error":"stale element reference","message":"stale element reference: stale elemen...\n#19 0x55abb90d6e1e \u003Cunknown>\n#20 0x7f1b0ae9caa4 \u003Cunknown>\n#21 0x7f1b0af29c6c \u003Cunknown>\n"}}'}
-
-    def check_response(self, response: dict[str, Any]) -> None:
-        """Check that a JSON response from the WebDriver does not have an error.
-    
-        Args:
-            response: The JSON response from the WebDriver server as a dictionary
-                object.
-    
-        Raises:
-            WebDriverException: If the response contains an error message.
-        """
-        status = response.get("status", None)
-        if not status or status == ErrorCode.SUCCESS:
-            return
-        value = None
-        message = response.get("message", "")
-        screen: str = response.get("screen", "")
-        stacktrace = None
-        if isinstance(status, int):
-            value_json = response.get("value", None)
-            if value_json and isinstance(value_json, str):
-                try:
-                    value = json.loads(value_json)
-                    if isinstance(value, dict):
-                        if len(value) == 1:
-                            value = value["value"]
-                        status = value.get("error", None)
-                        if not status:
-                            status = value.get("status", ErrorCode.UNKNOWN_ERROR)
-                            message = value.get("value") or value.get("message")
-                            if not isinstance(message, str):
-                                value = message
-                                message = message.get("message") if isinstance(message, dict) else None
-                        else:
-                            message = value.get("message", None)
-                except ValueError:
-                    pass
-    
-        exception_class: type[WebDriverException]
-        e = ErrorCode()
-        error_codes = [item for item in dir(e) if not item.startswith("__")]
-        for error_code in error_codes:
-            error_info = getattr(ErrorCode, error_code)
-            if isinstance(error_info, list) and status in error_info:
-                exception_class = getattr(ExceptionMapping, error_code, WebDriverException)
-                break
-        else:
-            exception_class = WebDriverException
-    
-        if not value:
-            value = response["value"]
-        if isinstance(value, str):
-            raise exception_class(value)
-        if message == "" and "message" in value:
-            message = value["message"]
-    
-        screen = None  # type: ignore[assignment]
-        if "screen" in value:
-            screen = value["screen"]
-    
-        stacktrace = None
-        st_value = value.get("stackTrace") or value.get("stacktrace")
-        if st_value:
-            if isinstance(st_value, str):
-                stacktrace = st_value.split("
-")
-            else:
-                stacktrace = []
-                try:
-                    for frame in st_value:
-                        line = frame.get("lineNumber", "")
-                        file = frame.get("fileName", "<anonymous>")
-                        if line:
-                            file = f"{file}:{line}"
-                        meth = frame.get("methodName", "<anonymous>")
-                        if "className" in frame:
-                            meth = f"{frame['className']}.{meth}"
-                        msg = "    at %s (%s)"
-                        msg = msg % (meth, file)
-                        stacktrace.append(msg)
-                except TypeError:
-                    pass
-        if exception_class == UnexpectedAlertPresentException:
-            alert_text = None
-            if "data" in value:
-                alert_text = value["data"].get("text")
-            elif "alert" in value:
-                alert_text = value["alert"].get("text")
-            raise exception_class(message, screen, stacktrace, alert_text)
->       raise exception_class(message, screen, stacktrace)
-E       selenium.common.exceptions.StaleElementReferenceException: Message: stale element reference: stale element not found in the current frame
-E         (Session info: chrome=149.0.7827.53); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
-E       Stacktrace:
-E       #0 0x55abb90d829a <unknown>
-E       #1 0x55abb8aba449 <unknown>
-E       #2 0x55abb8ac162b <unknown>
-E       #3 0x55abb8ac3eab <unknown>
-E       #4 0x55abb8ac3f53 <unknown>
-E       #5 0x55abb8b10d83 <unknown>
-E       #6 0x55abb8b0ffea <unknown>
-E       #7 0x55abb8b04072 <unknown>
-E       #8 0x55abb8b039b7 <unknown>
-E       #9 0x55abb8b56cbf <unknown>
-E       #10 0x55abb8b02132 <unknown>
-E       #11 0x55abb8b02f41 <unknown>
-E       #12 0x55abb909e737 <unknown>
-E       #13 0x55abb909cf39 <unknown>
-E       #14 0x55abb9087c26 <unknown>
-E       #15 0x55abb909dada <unknown>
-E       #16 0x55abb906fbd0 <unknown>
-E       #17 0x55abb90c4c28 <unknown>
-E       #18 0x55abb90c4dc5 <unknown>
-E       #19 0x55abb90d6e1e <unknown>
-E       #20 0x7f1b0ae9caa4 <unknown>
-E       #21 0x7f1b0af29c6c <unknown>
-
-../../../.local/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: StaleElementReferenceException
+tests/test_checkout.py:35: AssertionError
 ---------------------------- Captured stderr setup -----------------------------
-2026-06-12 07:50:05  INFO      conftest  Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
-2026-06-12 07:50:05  INFO      conftest  Chrome Browser Launched Successfully
-2026-06-12 07:50:05  INFO      conftest  Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
-2026-06-12 07:50:06  INFO      conftest  Driver started → browser=chrome | mode=headless
+2026-06-12 10:07:20  INFO      conftest  Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+2026-06-12 10:07:21  INFO      conftest  Chrome Browser Launched Successfully
+2026-06-12 10:07:21  INFO      conftest  Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+2026-06-12 10:07:22  INFO      conftest  Driver started → browser=chrome | mode=headless
 ------------------------------ Captured log setup ------------------------------
 INFO     conftest:conftest.py:62 Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
 INFO     conftest:conftest.py:119 Chrome Browser Launched Successfully
 INFO     conftest:conftest.py:175 Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
 INFO     conftest:conftest.py:184 Driver started → browser=chrome | mode=headless
 --------------------------- Captured stderr teardown ---------------------------
-2026-06-12 07:50:26  INFO      conftest  Quitting driver.
+2026-06-12 10:07:44  INFO      conftest  Quitting driver.
 ---------------------------- Captured log teardown -----------------------------
 INFO     conftest:conftest.py:196 Quitting driver.
 _______________ TestCheckout.test_checkout_with_register_account _______________
 
-self = <tests.test_checkout.TestCheckout object at 0x7f81d04d3590>
-driver = (<selenium.webdriver.chrome.webdriver.WebDriver (session="f68d38624aa1e613152eb955c74e3088")>, <selenium.webdriver.support.wait.WebDriverWait (session="f68d38624aa1e613152eb955c74e3088")>)
+self = <tests.test_checkout.TestCheckout object at 0x7fdc266e3410>
+driver = (<selenium.webdriver.chrome.webdriver.WebDriver (session="289250f2b2d1e63e70a469a419caee65")>, <selenium.webdriver.support.wait.WebDriverWait (session="289250f2b2d1e63e70a469a419caee65")>)
 
     def test_checkout_with_register_account(self, driver):
     
@@ -353,51 +228,288 @@ driver = (<selenium.webdriver.chrome.webdriver.WebDriver (session="f68d38624aa1e
 >       assert action.is_checkout_or_login_page_displayed()
 E       assert False
 E        +  where False = is_checkout_or_login_page_displayed()
-E        +    where is_checkout_or_login_page_displayed = <actions.checkoutAction.CheckoutAction object at 0x7f81d0263860>.is_checkout_or_login_page_displayed
+E        +    where is_checkout_or_login_page_displayed = <actions.checkoutAction.CheckoutAction object at 0x7fdc265d7b60>.is_checkout_or_login_page_displayed
 
 tests/test_checkout.py:62: AssertionError
 ---------------------------- Captured stderr setup -----------------------------
-2026-06-12 07:50:27  INFO      conftest  Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
-2026-06-12 07:50:27  INFO      conftest  Chrome Browser Launched Successfully
-2026-06-12 07:50:27  INFO      conftest  Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
-2026-06-12 07:50:28  INFO      conftest  Driver started → browser=chrome | mode=headless
+2026-06-12 10:07:48  INFO      conftest  Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+2026-06-12 10:07:48  INFO      conftest  Chrome Browser Launched Successfully
+2026-06-12 10:07:48  INFO      conftest  Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+2026-06-12 10:07:49  INFO      conftest  Driver started → browser=chrome | mode=headless
 ------------------------------ Captured log setup ------------------------------
 INFO     conftest:conftest.py:62 Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
 INFO     conftest:conftest.py:119 Chrome Browser Launched Successfully
 INFO     conftest:conftest.py:175 Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
 INFO     conftest:conftest.py:184 Driver started → browser=chrome | mode=headless
 --------------------------- Captured stderr teardown ---------------------------
-2026-06-12 07:50:45  INFO      conftest  Quitting driver.
+2026-06-12 10:08:08  INFO      conftest  Quitting driver.
+---------------------------- Captured log teardown -----------------------------
+INFO     conftest:conftest.py:196 Quitting driver.
+_________________________ test_add_product_via_search __________________________
+
+self = <actions.wishlist_actions.WishListActions object at 0x7fdc24c122a0>
+
+    def get_wishlist_success_message_generic(self):
+        """Return the wishlist success notification text, using a fallback locator if needed."""
+        try:
+>           message = self.get_text(self.wishlist_page.SUCCESS_NOTIFICATION)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+actions/wishlist_actions.py:163: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+actions/BaseAction.py:37: in get_text
+    return self.wait.until(ec.visibility_of_element_located(locator)).text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="94fda2f70b51d75233c7a75bf6dbbf27")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7fdc29904540>
+message = ''
+
+    def until(self, method: Callable[[D], Literal[False] | T], message: str = "") -> T:
+        """Wait until the method returns a value that is not False.
+    
+        Calls the method provided with the driver as an argument until the
+        return value does not evaluate to ``False``.
+    
+        Args:
+            method: A callable object that takes a WebDriver instance as an
+                argument.
+            message: Optional message for TimeoutException.
+    
+        Returns:
+            The result of the last call to `method`.
+    
+        Raises:
+            TimeoutException: If 'method' does not return a truthy value within
+                the WebDriverWait object's timeout.
+    
+        Example:
+            >>> from selenium.webdriver.common.by import By
+            >>> from selenium.webdriver.support.ui import WebDriverWait
+            >>> from selenium.webdriver.support import expected_conditions as EC
+            >>>
+            >>> # Wait until an element is visible on the page
+            >>> wait = WebDriverWait(driver, 10)
+            >>> element = wait.until(EC.visibility_of_element_located((By.ID, "exampleId")))
+            >>> print(element.text)
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            if time.monotonic() > end_time:
+                break
+            time.sleep(self._poll)
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5623342e229a <unknown>
+E       #1 0x562333cc4449 <unknown>
+E       #2 0x562333d18baf <unknown>
+E       #3 0x562333d18e01 <unknown>
+E       #4 0x562333d63ae4 <unknown>
+E       #5 0x562333d60cbf <unknown>
+E       #6 0x562333d0c132 <unknown>
+E       #7 0x562333d0cf41 <unknown>
+E       #8 0x5623342a8737 <unknown>
+E       #9 0x5623342a6f39 <unknown>
+E       #10 0x562334291c26 <unknown>
+E       #11 0x5623342a7ada <unknown>
+E       #12 0x562334279bd0 <unknown>
+E       #13 0x5623342cec28 <unknown>
+E       #14 0x5623342cedc5 <unknown>
+E       #15 0x5623342e0e1e <unknown>
+E       #16 0x7f3977a9caa4 <unknown>
+E       #17 0x7f3977b29c6c <unknown>
+
+../../../.local/lib/python3.12/site-packages/selenium/webdriver/support/wait.py:121: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+setup = (<selenium.webdriver.chrome.webdriver.WebDriver (session="94fda2f70b51d75233c7a75bf6dbbf27")>, <selenium.webdriver.sup...ait (session="94fda2f70b51d75233c7a75bf6dbbf27")>, <actions.wishlist_actions.WishListActions object at 0x7fdc24c122a0>)
+
+    @pytest.mark.Prasanna
+    def test_add_product_via_search(setup):
+        """Adding a product found via search shows it in the wishlist."""
+        _, _, wishlist_actions = setup
+    
+        logger.info("Starting test: add product '%s' via search", PRODUCT_IPOD_SHUFFLE)
+    
+        wishlist_actions.search_for_product(PRODUCT_IPOD_SHUFFLE)
+        logger.info("Searched for product: %s", PRODUCT_IPOD_SHUFFLE)
+    
+        wishlist_actions.click_product_from_search_results(PRODUCT_IPOD_SHUFFLE)
+        logger.info("Opened product page for: %s", PRODUCT_IPOD_SHUFFLE)
+    
+        wishlist_actions.click_heart_button_on_product_page()
+        logger.info("Clicked wishlist (heart) button on product page")
+    
+>       _assert_success_message(wishlist_actions.get_wishlist_success_message_generic())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_wishlist.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+actions/wishlist_actions.py:166: in get_wishlist_success_message_generic
+    message = self.get_text(self.wishlist_page.SUCCESS_NOTIFICATION_FALLBACK)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+actions/BaseAction.py:37: in get_text
+    return self.wait.until(ec.visibility_of_element_located(locator)).text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="94fda2f70b51d75233c7a75bf6dbbf27")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7fdc26324860>
+message = ''
+
+    def until(self, method: Callable[[D], Literal[False] | T], message: str = "") -> T:
+        """Wait until the method returns a value that is not False.
+    
+        Calls the method provided with the driver as an argument until the
+        return value does not evaluate to ``False``.
+    
+        Args:
+            method: A callable object that takes a WebDriver instance as an
+                argument.
+            message: Optional message for TimeoutException.
+    
+        Returns:
+            The result of the last call to `method`.
+    
+        Raises:
+            TimeoutException: If 'method' does not return a truthy value within
+                the WebDriverWait object's timeout.
+    
+        Example:
+            >>> from selenium.webdriver.common.by import By
+            >>> from selenium.webdriver.support.ui import WebDriverWait
+            >>> from selenium.webdriver.support import expected_conditions as EC
+            >>>
+            >>> # Wait until an element is visible on the page
+            >>> wait = WebDriverWait(driver, 10)
+            >>> element = wait.until(EC.visibility_of_element_located((By.ID, "exampleId")))
+            >>> print(element.text)
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            if time.monotonic() > end_time:
+                break
+            time.sleep(self._poll)
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5623342e229a <unknown>
+E       #1 0x562333cc4449 <unknown>
+E       #2 0x562333d18baf <unknown>
+E       #3 0x562333d18e01 <unknown>
+E       #4 0x562333d63ae4 <unknown>
+E       #5 0x562333d60cbf <unknown>
+E       #6 0x562333d0c132 <unknown>
+E       #7 0x562333d0cf41 <unknown>
+E       #8 0x5623342a8737 <unknown>
+E       #9 0x5623342a6f39 <unknown>
+E       #10 0x562334291c26 <unknown>
+E       #11 0x5623342a7ada <unknown>
+E       #12 0x562334279bd0 <unknown>
+E       #13 0x5623342cec28 <unknown>
+E       #14 0x5623342cedc5 <unknown>
+E       #15 0x5623342e0e1e <unknown>
+E       #16 0x7f3977a9caa4 <unknown>
+E       #17 0x7f3977b29c6c <unknown>
+
+../../../.local/lib/python3.12/site-packages/selenium/webdriver/support/wait.py:121: TimeoutException
+---------------------------- Captured stderr setup -----------------------------
+2026-06-12 10:09:26  INFO      conftest  Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+2026-06-12 10:09:26  INFO      conftest  Chrome Browser Launched Successfully
+2026-06-12 10:09:26  INFO      conftest  Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+2026-06-12 10:09:27  INFO      conftest  Driver started → browser=chrome | mode=headless
+2026-06-12 10:09:27  INFO      tests.test_wishlist  Landed on home page: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+2026-06-12 10:09:27  INFO      tests.test_wishlist  Using credentials for user: testlogin@gmail.com
+2026-06-12 10:09:28  INFO      tests.test_wishlist  Clicked 'My Account' link
+2026-06-12 10:09:28  INFO      tests.test_wishlist  Submitted login credentials
+2026-06-12 10:09:29  INFO      tests.test_wishlist  Login successful: True
+2026-06-12 10:09:29  INFO      actions.wishlist_actions  Navigating to home page: https://ecommerce-playground.lambdatest.io/
+2026-06-12 10:09:30  INFO      actions.wishlist_actions  Home page loaded successfully
+2026-06-12 10:09:30  INFO      tests.test_wishlist  Navigated back to home page: https://ecommerce-playground.lambdatest.io/
+------------------------------ Captured log setup ------------------------------
+INFO     conftest:conftest.py:62 Config → browser=chrome | mode=headless | url=https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+INFO     conftest:conftest.py:119 Chrome Browser Launched Successfully
+INFO     conftest:conftest.py:175 Launching URL: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+INFO     conftest:conftest.py:184 Driver started → browser=chrome | mode=headless
+INFO     tests.test_wishlist:test_wishlist.py:34 Landed on home page: https://ecommerce-playground.lambdatest.io/index.php?route=common/home
+INFO     tests.test_wishlist:test_wishlist.py:37 Using credentials for user: testlogin@gmail.com
+INFO     tests.test_wishlist:test_wishlist.py:41 Clicked 'My Account' link
+INFO     tests.test_wishlist:test_wishlist.py:45 Submitted login credentials
+INFO     tests.test_wishlist:test_wishlist.py:50 Login successful: True
+INFO     actions.wishlist_actions:wishlist_actions.py:37 Navigating to home page: https://ecommerce-playground.lambdatest.io/
+INFO     actions.wishlist_actions:wishlist_actions.py:43 Home page loaded successfully
+INFO     tests.test_wishlist:test_wishlist.py:53 Navigated back to home page: https://ecommerce-playground.lambdatest.io/
+----------------------------- Captured stderr call -----------------------------
+2026-06-12 10:09:30  INFO      tests.test_wishlist  Starting test: add product 'iPod Shuffle' via search
+2026-06-12 10:09:30  INFO      actions.wishlist_actions  Searched for product: iPod Shuffle
+2026-06-12 10:09:30  INFO      tests.test_wishlist  Searched for product: iPod Shuffle
+2026-06-12 10:09:32  INFO      actions.wishlist_actions  Opened product page for: iPod Shuffle
+2026-06-12 10:09:32  INFO      tests.test_wishlist  Opened product page for: iPod Shuffle
+2026-06-12 10:09:33  INFO      actions.wishlist_actions  Clicked wishlist (heart) button on product page
+2026-06-12 10:09:33  INFO      tests.test_wishlist  Clicked wishlist (heart) button on product page
+2026-06-12 10:09:48  WARNING   actions.wishlist_actions  Primary success notification not found, using fallback
+------------------------------ Captured log call -------------------------------
+INFO     tests.test_wishlist:test_wishlist.py:143 Starting test: add product 'iPod Shuffle' via search
+INFO     actions.wishlist_actions:wishlist_actions.py:133 Searched for product: iPod Shuffle
+INFO     tests.test_wishlist:test_wishlist.py:146 Searched for product: iPod Shuffle
+INFO     actions.wishlist_actions:wishlist_actions.py:143 Opened product page for: iPod Shuffle
+INFO     tests.test_wishlist:test_wishlist.py:149 Opened product page for: iPod Shuffle
+INFO     actions.wishlist_actions:wishlist_actions.py:154 Clicked wishlist (heart) button on product page
+INFO     tests.test_wishlist:test_wishlist.py:152 Clicked wishlist (heart) button on product page
+WARNING  actions.wishlist_actions:wishlist_actions.py:165 Primary success notification not found, using fallback
+--------------------------- Captured stderr teardown ---------------------------
+2026-06-12 10:10:03  INFO      conftest  Quitting driver.
 ---------------------------- Captured log teardown -----------------------------
 INFO     conftest:conftest.py:196 Quitting driver.
 =========================== short test summary info ============================
-FAILED tests/test_checkout.py::TestCheckout::test_guest_checkout_with_new_address_cod - selenium.common.exceptions.StaleElementReferenceException: Message: stale element reference: stale element not found in the current frame
-  (Session info: chrome=149.0.7827.53); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
-Stacktrace:
-#0 0x55abb90d829a <unknown>
-#1 0x55abb8aba449 <unknown>
-#2 0x55abb8ac162b <unknown>
-#3 0x55abb8ac3eab <unknown>
-#4 0x55abb8ac3f53 <unknown>
-#5 0x55abb8b10d83 <unknown>
-#6 0x55abb8b0ffea <unknown>
-#7 0x55abb8b04072 <unknown>
-#8 0x55abb8b039b7 <unknown>
-#9 0x55abb8b56cbf <unknown>
-#10 0x55abb8b02132 <unknown>
-#11 0x55abb8b02f41 <unknown>
-#12 0x55abb909e737 <unknown>
-#13 0x55abb909cf39 <unknown>
-#14 0x55abb9087c26 <unknown>
-#15 0x55abb909dada <unknown>
-#16 0x55abb906fbd0 <unknown>
-#17 0x55abb90c4c28 <unknown>
-#18 0x55abb90c4dc5 <unknown>
-#19 0x55abb90d6e1e <unknown>
-#20 0x7f1b0ae9caa4 <unknown>
-#21 0x7f1b0af29c6c <unknown>
+FAILED tests/test_checkout.py::TestCheckout::test_guest_checkout_with_new_address_cod - assert False
+ +  where False = is_order_placed_successfully()
+ +    where is_order_placed_successfully = <actions.checkoutAction.CheckoutAction object at 0x7fdc265cab70>.is_order_placed_successfully
 FAILED tests/test_checkout.py::TestCheckout::test_checkout_with_register_account - assert False
  +  where False = is_checkout_or_login_page_displayed()
- +    where is_checkout_or_login_page_displayed = <actions.checkoutAction.CheckoutAction object at 0x7f81d0263860>.is_checkout_or_login_page_displayed
-=================== 2 failed, 16 passed in 177.57s (0:02:57) ===================
+ +    where is_checkout_or_login_page_displayed = <actions.checkoutAction.CheckoutAction object at 0x7fdc265d7b60>.is_checkout_or_login_page_displayed
+FAILED tests/test_wishlist.py::test_add_product_via_search - selenium.common.exceptions.TimeoutException: Message: 
+Stacktrace:
+#0 0x5623342e229a <unknown>
+#1 0x562333cc4449 <unknown>
+#2 0x562333d18baf <unknown>
+#3 0x562333d18e01 <unknown>
+#4 0x562333d63ae4 <unknown>
+#5 0x562333d60cbf <unknown>
+#6 0x562333d0c132 <unknown>
+#7 0x562333d0cf41 <unknown>
+#8 0x5623342a8737 <unknown>
+#9 0x5623342a6f39 <unknown>
+#10 0x562334291c26 <unknown>
+#11 0x5623342a7ada <unknown>
+#12 0x562334279bd0 <unknown>
+#13 0x5623342cec28 <unknown>
+#14 0x5623342cedc5 <unknown>
+#15 0x5623342e0e1e <unknown>
+#16 0x7f3977a9caa4 <unknown>
+#17 0x7f3977b29c6c <unknown>
+=================== 3 failed, 15 passed in 237.31s (0:03:57) ===================
 ```

@@ -104,7 +104,7 @@ class ConfigReader:
     #ForgetPassword credential
 
     @classmethod
-    def get_email(cls):
+    def get_validemail(cls):
         return cls.get("Forget password data","email")
     
     @classmethod
@@ -222,3 +222,14 @@ class ConfigReader:
     @classmethod
     def get_expected_order_message(cls):
         return cls.get("messages", "expected_order_msg")
+    
+    #Logout credentials
+    @classmethod
+    def get_mail(cls):
+        return cls.get("credentials","email")
+    
+    @classmethod
+    def get_pwd(cls):
+        return cls.get("credentials","password")
+    
+    

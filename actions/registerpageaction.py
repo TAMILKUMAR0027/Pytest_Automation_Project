@@ -14,12 +14,11 @@ class RegisterPageAction(BaseAction):
         self.wait = WebDriverWait(driver, 15)
         self.rp = RegisterPage(driver)
 
-    def enter_register_credentials(
-        self, fname, lname, telephone, password, cpassword
-    ):
-        self.wait.until(
-            ec.visibility_of_element_located(self.rp.fname)
-        ).send_keys(fname)
+    def enter_register_credentials(self, fname, lname, telephone, password, cpassword):
+
+        self.wait.until(ec.visibility_of_element_located(self.rp.fname)).send_keys(
+            fname
+        )
 
         self.email = f"test{int(time.time())}@gmail.com"
 

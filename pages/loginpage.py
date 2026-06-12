@@ -1,7 +1,12 @@
 from selenium.webdriver.common.by import By
+from pages.BasePage import BasePage
 
 
-class LoginPage:
+class LoginPage(BasePage):
     def __init__(self, driver):
-        self.driver = driver
-        self.rcontinue = (By.XPATH, "//h2[text()='New Customer']/following-sibling::a")
+        super().__init__(driver)
+
+    rcontinue = (By.XPATH, "//h2[text()='New Customer']/following-sibling::a")
+    loginEmail = (By.XPATH, "//input[@name='email']")
+    loginPassword = (By.XPATH, "//input[@name='password']")
+    loginContinue = (By.XPATH, "//input[@type='submit']")

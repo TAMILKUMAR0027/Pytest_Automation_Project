@@ -10,3 +10,5 @@ class ProductPageAction(BaseAction):
         return self.get_text(self.pp.brand)
     def getInstock(self):
         return self.get_text(self.pp.instock)
+    def getOutStock(self):
+        return self.get_text(self.pp.outStock)

@@ -1,3 +1,5 @@
+import time
+
 from actions.BaseAction import BaseAction
 from pages.FilterPage import FilterPage
 
@@ -14,5 +16,7 @@ class FilterPageAction(BaseAction):
         self.click(self.fp.inStockOption)
     def clickCanonProduct(self):
         self.click(self.fp.canonProduct)
-    
-    
+    def movePriceSlider(self):
+        self.move_slider(self.fp.FilterSlider,-100)
+    def getPriceValue(self):
+        return self.get_input_value(self.fp.price)

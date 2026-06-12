@@ -12,14 +12,14 @@ def get_logger(name: str) -> logging.Logger:
         logger = get_logger(__name__)
     """
 
-    # logs/ folder sits at the project root (two levels up from utils/)
+    
     log_dir  = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
     os.makedirs(log_dir, exist_ok=True)
     log_file = os.path.join(log_dir, "logs.log")
 
     logger = logging.getLogger(name)
 
-    # Guard: don't add duplicate handlers on re-import
+    
     if logger.handlers:
         return logger
 

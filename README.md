@@ -143,13 +143,24 @@ platform linux -- Python 3.12.3, pytest-9.0.3, pluggy-1.6.0
 rootdir: /home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project
 configfile: pytest.ini
 testpaths: tests
-plugins: ordering-0.6, html-4.2.0, ast-transformer-1.0.3, rerunfailures-16.3, allure-pytest-2.16.0, soft-assertions-0.1.2, metadata-3.1.1, xdist-3.8.0
-collected 4 items
+plugins: rerunfailures-16.3, soft-assertions-0.1.2, xdist-3.8.0, allure-pytest-2.16.0, metadata-3.1.1, html-4.2.0, ordering-0.6, ast-transformer-1.0.3
+collected 7 items / 1 error
 
-tests/test_Instock_product.py .                                          [ 25%]
-tests/test_filterBymanufacture.py .                                      [ 50%]
-tests/test_launch.py .                                                   [ 75%]
-tests/test_register.py .                                                 [100%]
-
-============================== 4 passed in 23.39s ==============================
+==================================== ERRORS ====================================
+___________________ ERROR collecting tests/test_wishlist.py ____________________
+ImportError while importing test module '/home/runner/work/Pytest_Automation_Project/Pytest_Automation_Project/tests/test_wishlist.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_wishlist.py:5: in <module>
+    from actions.wishlist_actions import WishListActions
+actions/wishlist_actions.py:10: in <module>
+    from utils.base_action import BaseAction
+E   ModuleNotFoundError: No module named 'utils.base_action'
+=========================== short test summary info ============================
+ERROR tests/test_wishlist.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.12s ===============================
 ```

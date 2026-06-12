@@ -1,9 +1,10 @@
-# pages/wishlist_page.py
+"""Locators for the wishlist-related pages (home, product, search, wishlist)."""
 
 from selenium.webdriver.common.by import By
 
 
 class WishListPage:
+    """Centralized locators for wishlist functionality."""
 
     HOME_LOGO = (By.XPATH, "//img[@alt='Poco Electro']")
     HOME_LOGO_ALT = (By.XPATH, "//a[contains(@class,'navbar-brand')]")
@@ -13,11 +14,11 @@ class WishListPage:
 
     SUCCESS_NOTIFICATION = (
         By.XPATH,
-        "//div[@id='notification-box-top']//div[contains(@class,'toast-body')]//p"
+        "//div[@id='notification-box-top']//div[contains(@class,'toast-body')]//p",
     )
     SUCCESS_NOTIFICATION_FALLBACK = (
         By.XPATH,
-        "//div[@id='notification-box-top']//p"
+        "//div[@id='notification-box-top']//p",
     )
 
     WISHLIST_POPUP_LINK = (By.XPATH, "//a[@class='btn btn-secondary btn-block']")
@@ -26,69 +27,69 @@ class WishListPage:
     MY_WISHLIST_TITLE = (By.XPATH, "//h1[contains(text(),'My Wish List')]")
     REMOVAL_SUCCESS_ALERT = (
         By.XPATH,
-        "//div[contains(@class,'alert-success') and contains(@class,'alert-dismissible')]"
+        "//div[contains(@class,'alert-success') and contains(@class,'alert-dismissible')]",
     )
 
     WISHLIST_PRODUCT_NAMES = (
         By.XPATH,
-        "//table[@class='table table-hover border']//child::td[2]"
+        "//table[@class='table table-hover border']//child::td[2]",
     )
     WISHLIST_PRODUCT_PRICES = (
         By.XPATH,
-        "//table[@class='table table-hover border']//child::td[5]"
+        "//table[@class='table table-hover border']//child::td[5]",
     )
 
     SEARCH_BAR = (
         By.XPATH,
-        "//div[@id='entry_217822']//input[@placeholder='Search For Products']"
+        "//div[@id='entry_217822']//input[@placeholder='Search For Products']",
     )
 
-    IPOD_SHUFFLE_PRODUCT = (
-        By.XPATH,
-        "//img[@title='iPod Shuffle']"
-    )
-
-    IPOD_SHUFFLE_WISHLIST_BTN = (
-        By.XPATH,
-        "//div[@id='image-gallery-216811']//button"
-    )
+    IPOD_SHUFFLE_PRODUCT = (By.XPATH, "//img[@title='iPod Shuffle']")
+    IPOD_SHUFFLE_WISHLIST_BTN = (By.XPATH, "//div[@id='image-gallery-216811']//button")
 
     @staticmethod
     def product_card(product_name):
+        """Locator for the product card containing the given product name."""
         return (
             By.XPATH,
-            f"//div[contains(@class,'product-thumb') and .//a[contains(normalize-space(),'{product_name}')]]"
+            "//div[contains(@class,'product-thumb') and "
+            f".//a[contains(normalize-space(),'{product_name}')]]",
         )
 
     @staticmethod
     def product_wishlist_button(product_name):
+        """Locator for the wishlist button inside the given product's card."""
         return (
             By.XPATH,
-            f"//div[contains(@class,'product-thumb') and .//a[contains(normalize-space(),'{product_name}')]]"
-            "//button[contains(@class,'wishlist')]"
+            "//div[contains(@class,'product-thumb') and "
+            f".//a[contains(normalize-space(),'{product_name}')]]"
+            "//button[contains(@class,'wishlist')]",
         )
 
     @staticmethod
     def product_link_for(product_name):
+        """Locator for the product link in the wishlist table for the given product."""
         return (
             By.XPATH,
             "//table[contains(@class,'table')]//tbody//tr//td[2]//a"
-            f"[contains(normalize-space(),'{product_name}')]"
+            f"[contains(normalize-space(),'{product_name}')]",
         )
 
     @staticmethod
     def row_for(product_name):
+        """Locator for the wishlist table row containing the given product."""
         return (
             By.XPATH,
             "//table[contains(@class,'table')]//tbody//tr"
-            f"[.//td[2]//a[contains(normalize-space(),'{product_name}')]]"
+            f"[.//td[2]//a[contains(normalize-space(),'{product_name}')]]",
         )
 
     @staticmethod
     def remove_button_for(product_name):
+        """Locator for the 'Remove' button in the wishlist row for the given product."""
         return (
             By.XPATH,
             "//table[contains(@class,'table')]//tbody//tr"
             f"[.//td[2]//a[contains(normalize-space(),'{product_name}')]]"
-            "//a[@title='Remove' or contains(@href,'remove')]"
+            "//a[@title='Remove' or contains(@href,'remove')]",
         )

@@ -1,81 +1,101 @@
+"""Base class providing common Selenium helper methods for all page actions."""
+
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as ec
+
+DEFAULT_WAIT_SECONDS = 15
+ALERT_WAIT_SECONDS = 3
 
 
 class BaseAction:
+    """Common reusable Selenium actions shared across all page action classes."""
 
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 15)
+        self.wait = WebDriverWait(driver, DEFAULT_WAIT_SECONDS)
+        self.long_wait = WebDriverWait(driver, DEFAULT_WAIT_SECONDS)
 
     def click(self, locator):
+        """Click an element, falling back to a JS click if it is not directly clickable."""
         try:
-            element = self.wait.until(EC.element_to_be_clickable(locator))
+            element = self.wait.until(ec.element_to_be_clickable(locator))
             element.click()
         except TimeoutException:
-            element = self.wait.until(EC.presence_of_element_located(locator))
-            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-            self.driver.execute_script("arguments[0].click();", element)
+            element = self.wait.until(ec.presence_of_element_located(locator))
+            self._scroll_into_view(element)
+            self._js_click_element(element)
 
     def send_keys(self, locator, value):
-        element = self.wait.until(EC.visibility_of_element_located(locator))
+        """Clear a field and type the given value into it."""
+        element = self.wait.until(ec.visibility_of_element_located(locator))
         element.clear()
         element.send_keys(value)
 
     def get_text(self, locator):
-        return self.wait.until(EC.visibility_of_element_located(locator)).text
+        """Return the visible text of an element."""
+        return self.wait.until(ec.visibility_of_element_located(locator)).text
 
     def is_displayed(self, locator):
-        try:
-            return self.driver.find_element(*locator).is_displayed()
-        except:
-            return False
+        """Return True if the element is present and displayed, else False."""
+        elements = self.driver.find_elements(*locator)
+        return bool(elements) and elements[0].is_displayed()
 
     def js_click(self, locator):
+        """Click an element via JavaScript."""
         element = self.driver.find_element(*locator)
-        self.driver.execute_script("arguments[0].click();", element)
+        self._js_click_element(element)
 
     def scroll_into_view(self, locator):
-        element = self.driver.find_element(*locator)
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        """Scroll the given element into the center of the viewport and return it."""
+        element = self.wait.until(ec.presence_of_element_located(locator))
+        self._scroll_into_view(element)
+        return element
 
     def move_slider(self, locator, x_offset, y_offset=0):
-        element = self.wait.until(EC.visibility_of_element_located(locator))
-
+        """Drag an element by the given x/y offset."""
+        element = self.wait.until(ec.visibility_of_element_located(locator))
         ActionChains(self.driver) \
             .click_and_hold(element) \
             .move_by_offset(x_offset, y_offset) \
             .release() \
             .perform()
-        
+
     def wait_for_page_load(self):
+        """Wait until the document's readyState is 'complete'."""
         self.long_wait.until(
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
 
     def is_present(self, locator):
+        """Return True if at least one matching element exists in the DOM."""
         return len(self.driver.find_elements(*locator)) > 0
 
-
-
     def get_input_value(self, locator):
-      element = self.wait.until(EC.visibility_of_element_located(locator))
-      return element.get_attribute("value")
-    
+        """Return the 'value' attribute of an input element."""
+        element = self.wait.until(ec.visibility_of_element_located(locator))
+        return element.get_attribute("value")
 
     def get_elements_text(self, locator):
+        """Return a list of non-empty, stripped text values for all matching elements."""
         elements = self.long_wait.until(
-            EC.visibility_of_all_elements_located(locator)
+            ec.visibility_of_all_elements_located(locator)
         )
         return [el.text.strip() for el in elements if el.text.strip()]
 
     def dismiss_alert_if_present(self):
+        """Dismiss a JS alert if one appears within ALERT_WAIT_SECONDS; return its text."""
         try:
-            alert = WebDriverWait(self.driver, 3).until(EC.alert_is_present())
+            alert = WebDriverWait(self.driver, ALERT_WAIT_SECONDS).until(ec.alert_is_present())
             text = alert.text
             alert.dismiss()
             return text
         except TimeoutException:
             return None
+
+    def _scroll_into_view(self, element):
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+
+    def _js_click_element(self, element):
+        self.driver.execute_script("arguments[0].click();", element)

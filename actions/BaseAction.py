@@ -8,7 +8,6 @@ from selenium.webdriver.support import expected_conditions as ec
 DEFAULT_WAIT_SECONDS = 15
 ALERT_WAIT_SECONDS = 3
 
-
 class BaseAction:
     """Common reusable Selenium actions shared across all page action classes."""
 

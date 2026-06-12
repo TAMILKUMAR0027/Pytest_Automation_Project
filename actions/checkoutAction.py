@@ -2,6 +2,7 @@ from actions.BaseAction import BaseAction
 from actions.loginpageaction import LoginPageAction
 from pages.checkoutPage import CheckoutPage
 from utils.configReader import ConfigReader
+from utils.excelReader import get_data
 
 
 class CheckoutAction(BaseAction):
@@ -102,34 +103,39 @@ class CheckoutAction(BaseAction):
 
     def enter_registration_details(self):
 
+        data = get_data(
+            "testdata/RegisterData.xlsx",
+            "Register"
+        )
+
         self.send_keys(
             self.cp.REG_FIRST_NAME_INPUT,
-            ConfigReader.get("registration", "reg_first_name")
+            data[0][0]
         )
 
         self.send_keys(
             self.cp.REG_LAST_NAME_INPUT,
-            ConfigReader.get("registration", "reg_last_name")
+            data[0][1]
         )
 
         self.send_keys(
             self.cp.REG_EMAIL_INPUT,
-            ConfigReader.get("registration", "reg_email")
+            data[0][2]
         )
 
         self.send_keys(
             self.cp.REG_TELEPHONE_INPUT,
-            ConfigReader.get("registration", "reg_telephone")
+            data[0][3]
         )
 
         self.send_keys(
             self.cp.REG_PASSWORD_INPUT,
-            ConfigReader.get("registration", "reg_password")
+            data[0][4]
         )
 
         self.send_keys(
             self.cp.REG_CONFIRM_PASSWORD_INPUT,
-            ConfigReader.get("registration", "reg_confirm_password")
+            data[0][5]
         )
 
     def agree_to_privacy_policy(self):

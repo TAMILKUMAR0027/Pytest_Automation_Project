@@ -15,3 +15,24 @@ def get_data(path, sheet_name):
             row_list.append(sheet.cell(r, c).value)
         final_list.append(row_list)
     return final_list
+
+
+def get_registration_data(path, sheet_name):
+    Workbook = openpyxl.load_workbook(path)
+    sheet = Workbook[sheet_name]
+
+    return {
+        "firstname": sheet.cell(2, 1).value,
+        "lastname": sheet.cell(2, 2).value,
+        "email": sheet.cell(2, 3).value,
+        "telephone": sheet.cell(2, 4).value,
+        "password": sheet.cell(2, 5).value,
+        "confirm_password": sheet.cell(2, 6).value,
+        "company": sheet.cell(2, 7).value,
+        "address1": sheet.cell(2, 8).value,
+        "address2": sheet.cell(2, 9).value,
+        "city": sheet.cell(2, 10).value,
+        "postcode": sheet.cell(2, 11).value,
+        "country": sheet.cell(2, 12).value,
+        "region": sheet.cell(2, 13).value
+    }

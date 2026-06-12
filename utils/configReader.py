@@ -101,3 +101,21 @@ class ConfigReader:
     @classmethod
     def get_register_data(cls, key):
         return cls.get("register credentials", key)
+    
+    #ForgetPassword credential
+
+    @classmethod
+    def get_email(cls):
+        return cls.get("Forget password data","email")
+    
+    @classmethod
+    def get_message(cls):
+        return cls.get("Forget password data","successmsg")
+    
+    @classmethod
+    def get_invalidemail(cls):
+        return cls.get("Forget password data","invalidemail")
+    
+    @classmethod
+    def get_warning(cls):
+        return cls.get("Forget password data","warningmsg")

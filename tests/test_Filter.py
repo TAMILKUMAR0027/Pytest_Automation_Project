@@ -158,6 +158,7 @@ class TestFilterByManufacture:
         assert product_count > 0, \
             "No products displayed after applying filter"
 
+        # assert in the codde
         assert product_count == 25, \
             f"Expected maximum 15 products but found {product_count}"
 

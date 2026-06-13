@@ -18,7 +18,7 @@ class Forgetpasswordpageaction(BaseAction):
     def clickForgetpassword(self):
         self.click(self.fp.forgetpassword)
     def enterEmail(self):
-        email=ConfigReader.get_email()
+        email=ConfigReader.get_validemail()
         self.send_keys(self.fp.email,email)
     def enterInvalidEmail(self):
         invalidemail=ConfigReader.get_invalidemail()

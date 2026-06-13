@@ -15,7 +15,7 @@ class TestLogin:
     @pytest.mark.parametrize(
         "username,password",
         get_data(
-            r"D:\Pytest_Automation_Project\Pytest_Automation_Project\data_provider\DataProvider.xlsx",
+            "data_provider/DataProvider.xlsx",
             "loginDataValid",
         ),
     )
@@ -40,7 +40,7 @@ class TestLogin:
     @pytest.mark.parametrize(
         "username1,password1",
         get_data(
-            r"D:\Pytest_Automation_Project\Pytest_Automation_Project\data_provider\DataProvider.xlsx",
+            "data_provider/DataProvider.xlsx",
             "loginDataInvalid",
         ),
     )

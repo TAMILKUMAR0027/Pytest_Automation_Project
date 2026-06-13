@@ -25,19 +25,24 @@ class LaunchActions(BaseAction):
         logger.info("Expected URL : %s", expected_url)
         logger.info("Actual URL   : %s", actual_url)
         if actual_url != expected_url:
-            logger.error("URL mismatch! Expected: %s, Actual: %s", expected_url, actual_url)
-        assert actual_url == expected_url, (
-            f"URL mismatch!\n  Expected : {expected_url}\n  Actual   : {actual_url}"
-        )
+            logger.error(
+                "URL mismatch! Expected: %s, Actual: %s", expected_url, actual_url
+            )
+        assert (
+            actual_url == expected_url
+        ), f"URL mismatch!\n  Expected : {expected_url}\n  Actual   : {actual_url}"
 
         actual_title = self.launch_page.get_page_title()
         logger.info("Page Title: %s", actual_title)
-        assert EXPECTED_TITLE_KEYWORD in actual_title, (
-            f"Page title mismatch. Actual Title: {actual_title}"
-        )
+        assert (
+            EXPECTED_TITLE_KEYWORD in actual_title
+        ), f"Page title mismatch. Actual Title: {actual_title}"
 
         logo_displayed = self.launch_page.get_logo()
         logger.info("Logo displayed: %s", logo_displayed)
         assert logo_displayed, "Logo is NOT displayed on the homepage"
 
         logger.info("All homepage verifications passed successfully!")
+
+    def click_top_collection_product(self):
+        self.click(self.launch_page.topCollectionProduct)

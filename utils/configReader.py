@@ -124,6 +124,7 @@ class ConfigReader:
     def get_warning(cls):
 
         return cls.get("Forget password data", "warningmsg")
+
     # ─────────────────────────────────────────────
     # Billing Data
     # ─────────────────────────────────────────────
@@ -228,6 +229,14 @@ class ConfigReader:
     def get_expected_order_message(cls):
         return cls.get("messages", "expected_order_msg")
 
+
+    # ─────────────────────────────────────────────
+    # Cart
+    # ─────────────────────────────────────────────
+    @classmethod
+    def get_producct_quantity_update(cls):
+        return cls.get("cart test data", "quantity")
+
     
     #Logout credentials
     @classmethod
@@ -237,5 +246,4 @@ class ConfigReader:
     @classmethod
     def get_pwd(cls):
         return cls.get("credentials","password")
-    
     

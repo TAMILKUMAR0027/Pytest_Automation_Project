@@ -1,6 +1,8 @@
 import pytest
 from actions.ShopbycategoryAction import ShopByCategoryAction
+from utils.loggerCreator import get_logger
 
+logger = get_logger(__name__)
 
 @pytest.mark.ShopByCategory
 class TestShopByCategory:

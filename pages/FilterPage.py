@@ -17,3 +17,4 @@ class FilterPage(BasePage):
     price=By.XPATH,"//div[@id='mz-filter-panel-0-0']//input[@placeholder='Maximum Price']"
     outStockOption=By.XPATH,"//label[@for='mz-fss-0-5']"
     iPodProduct=By.XPATH,"//div[@class='carousel-item active']//img[@title='iPod Classic']"
+    allProducts=By.XPATH,"//div[@class='product-thumb']//h4"

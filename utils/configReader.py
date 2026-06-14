@@ -80,7 +80,7 @@ class ConfigReader:
 
     @classmethod
     def get_email(cls):
-        return cls.get("register credentials", "email")
+        return cls.get("invalid register", "email")
 
     @classmethod
     def get_telephone(cls):
@@ -100,24 +100,30 @@ class ConfigReader:
     def get_register_data(cls, key):
         return cls.get("register credentials", key)
 
-    
-    #ForgetPassword credential
+    # ForgetPassword credential
 
     @classmethod
-    def get_email(cls):
+
+    def get_validemail(cls):
         return cls.get("Forget password data","email")
     
+
+    def get_email(cls):
+        return cls.get("Forget password data", "email")
+
+
     @classmethod
     def get_message(cls):
-        return cls.get("Forget password data","successmsg")
-    
+        return cls.get("Forget password data", "successmsg")
+
     @classmethod
     def get_invalidemail(cls):
-        return cls.get("Forget password data","invalidemail")
-    
+        return cls.get("Forget password data", "invalidemail")
+
     @classmethod
     def get_warning(cls):
-        return cls.get("Forget password data","warningmsg")
+
+        return cls.get("Forget password data", "warningmsg")
 
     # ─────────────────────────────────────────────
     # Billing Data
@@ -222,3 +228,22 @@ class ConfigReader:
     @classmethod
     def get_expected_order_message(cls):
         return cls.get("messages", "expected_order_msg")
+
+
+    # ─────────────────────────────────────────────
+    # Cart
+    # ─────────────────────────────────────────────
+    @classmethod
+    def get_producct_quantity_update(cls):
+        return cls.get("cart test data", "quantity")
+
+    
+    #Logout credentials
+    @classmethod
+    def get_mail(cls):
+        return cls.get("credentials","email")
+    
+    @classmethod
+    def get_pwd(cls):
+        return cls.get("credentials","password")
+    

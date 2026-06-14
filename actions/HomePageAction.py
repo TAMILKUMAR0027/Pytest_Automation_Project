@@ -10,7 +10,13 @@ class HomePageAction(BaseAction):
 
     def clickShopByCategory(self):
         self.click(self.hp.ShopByCategory)
+
     def clickMonitor(self):
         self.click(self.hp.Monitor)
+
     def click_myAcc(self):
         self.click(self.hp.myAccLink)
+    def click_HpProduct(self):
+        self.click(self.hp.Hp_Product)
+    def click_CompareLink(self):
+        self.click(self.hp.Compare_Link)

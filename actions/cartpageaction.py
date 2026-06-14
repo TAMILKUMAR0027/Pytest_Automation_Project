@@ -1,3 +1,5 @@
+from selenium.webdriver.support import expected_conditions
+
 from pages.ProductPage import ProductPage
 from pages.cartpage import CartPage
 from pages.launch import LaunchPages
@@ -21,3 +23,8 @@ class CartPageAction(BaseAction):
         self.click(self.cp.quantity_update)
         actual = self.get_text(self.cp.quantity_update_success)
         return "You have modified your shopping cart!" in actual
+
+    def cart_removeProd_check(self):
+        self.click(self.cp.cart_product_removeBtn)
+        actual = self.get_text(self.cp.cart_Removed_Msg)
+        return "Your shopping cart is empty!" in actual

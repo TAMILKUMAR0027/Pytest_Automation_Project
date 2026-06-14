@@ -13,3 +13,18 @@ class AccountPageAction(BaseAction):
     def success_login(self):
         actual = self.get_text(self.apa.accountLoginSuccess)
         return "My Account" in actual
+
+    def click_subscribe_newsLetter(self):
+        self.click(self.apa.subscribe_newsletter)
+
+    def succes_msg_update_newsLetter(self):
+        actual = self.get_text(self.apa.subscribeUpdate_Succ_msg)
+        return "Your newsletter subscription has been successfully updated!" in actual
+
+    def click_editAccount_info(self, telephone):
+        self.click(self.apa.editAccInfo)
+        self.clear(self.apa.telephoneEdit)
+        self.send_keys(self.apa.telephoneEdit, telephone)
+        self.click(self.apa.editContinue)
+        actual = self.get_text(self.apa.editSuccessMsg)
+        return "Your account has been successfully updated." in actual

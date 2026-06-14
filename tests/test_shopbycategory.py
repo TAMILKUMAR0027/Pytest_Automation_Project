@@ -1,4 +1,5 @@
 import pytest
+from actions.HomePageAction import HomePageAction
 from actions.ShopbycategoryAction import ShopByCategoryAction
 from utils.loggerCreator import get_logger
 
@@ -6,7 +7,6 @@ logger = get_logger(__name__)
 
 @pytest.mark.ShopByCategory
 class TestShopByCategory:
-
     @pytest.mark.parametrize(
         "category, expected_title",
         [
@@ -17,11 +17,15 @@ class TestShopByCategory:
         ]
     )
     def test_category_navigation(self, driver, category, expected_title):
-
         drv, wait = driver
         action = ShopByCategoryAction(drv)
-        action.launch_url("https://ecommerce-playground.lambdatest.io")
-        action.click_shop_by_category()
+        
+
+        hpa = HomePageAction(drv)
+       
+
+        logger.info("Opening Shop By Category")
+        hpa.clickShopByCategory()
         action.select_category(category)
         actual_title = action.get_page_title()
 

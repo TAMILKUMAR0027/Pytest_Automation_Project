@@ -49,7 +49,8 @@ class TestCheckout:
     
 
         action.select_register_account()
-        data = get_registration_data("D:\Pytest_Automation_Project\data_provider\DataProvider.xlsx", "Registration")
+     
+        data = get_registration_data(r"D:\Pytest_Automation_Project\data_provider\DataProvider.xlsx", "Registration")
 
         action.enter_registration_details(data)
         action.agree_to_privacy_policy()

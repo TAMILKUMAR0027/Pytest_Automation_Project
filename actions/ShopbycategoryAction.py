@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 
 from pages.ShopbyCategoryPage import ShopByCategoryPage
 from utils.loggerCreator import get_logger
@@ -14,29 +15,26 @@ class ShopByCategoryAction:
         self.wait = WebDriverWait(driver, 20)
 
     def launch_url(self, url):
-
         try:
             logger.info(f"Launching URL: {url}")
             self.driver.get(url)
-            self.driver.maximize_window()
+
+            is_headless = os.getenv("CI", "").lower() == "true"
+            if not is_headless:
+                self.driver.maximize_window()
 
             logger.info("Application launched successfully")
 
         except Exception as e:
-            logger.error( f"Failed to launch application: {e}")
+            logger.error(f"Failed to launch application: {e}")
             raise
 
     def click_shop_by_category(self):
-
         try:
             logger.info("Clicking Shop By Category menu")
-            element = self.wait.until(
-                EC.element_to_be_clickable(
-                    self.page.SHOP_BY_CATEGORY_MENU
-                )
-            )
-
-            element.click()
+            element = self.wait.until(EC.presence_of_element_located(self.page.SHOP_BY_CATEGORY_MENU))
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+            self.driver.execute_script("arguments[0].click();", element)
             logger.info("Successfully clicked Shop By Category menu")
 
         except Exception as e:
@@ -44,7 +42,6 @@ class ShopByCategoryAction:
             raise
 
     def select_category(self, category):
-
         try:
             logger.info(f"Selecting category: {category}")
 
@@ -73,10 +70,9 @@ class ShopByCategoryAction:
             raise
 
     def get_page_title(self):
-
         try:
             title = self.driver.title
-            logger.info( f"Page title fetched successfully: {title}")
+            logger.info(f"Page title fetched successfully: {title}")
             return title
         except Exception as e:
             logger.error(f"Unable to fetch page title: {e}")

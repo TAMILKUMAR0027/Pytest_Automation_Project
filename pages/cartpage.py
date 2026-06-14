@@ -20,3 +20,11 @@ class CartPage(BasePage):
         By.CSS_SELECTOR,
         ".alert.alert-success.alert-dismissible",
     )
+
+    cart_product_removeBtn = (By.XPATH, "//button[@class='btn btn-danger']")
+    cart_Removed_Msg = (
+        By.XPATH,
+        "//div[@id='content']//p[contains(text(),'Your shopping cart is empty!')]",
+    )
+
+    allProductName = (By.XPATH, "//td[@class='text-left']/a")

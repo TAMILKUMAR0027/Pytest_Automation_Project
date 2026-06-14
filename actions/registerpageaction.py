@@ -48,3 +48,20 @@ class RegisterPageAction(BaseAction):
         print("Actual register error message:", actual)
 
         return "E-Mail Address is already registered" in actual
+
+    def enter_registerDetails_without_pp(
+        self, fname, lname, telephone, password, cpassword
+    ):
+
+        self.send_keys(self.rp.fname, fname)
+
+        self.email = f"test{int(time.time())}@gmail.com"
+
+        self.send_keys(self.rp.lname, lname)
+        self.send_keys(self.rp.email, self.email)
+        self.send_keys(self.rp.telephone, telephone)
+        self.send_keys(self.rp.password, password)
+        self.send_keys(self.rp.cpassword, cpassword)
+        self.click(self.rp.regContinue)
+        actual = self.get_text(self.rp.privacyPolicy_msg)
+        return "You must agree to the Privacy Policy!" in actual

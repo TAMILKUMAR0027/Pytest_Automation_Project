@@ -18,3 +18,7 @@ class RegisterPage(BasePage):
             By.XPATH,
             "//div[@class='alert alert-danger alert-dismissible']",
         )
+        self.privacyPolicy_msg = (
+            By.CSS_SELECTOR,
+            ".alert.alert-danger.alert-dismissible",
+        )

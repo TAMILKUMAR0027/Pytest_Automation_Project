@@ -23,3 +23,8 @@ class LaunchPages:
         """Return True if the application logo is displayed."""
         elements = self.driver.find_elements(*self.LOGO)
         return bool(elements) and elements[0].is_displayed()
+
+    topCollectionProduct = (
+        By.XPATH,
+        "//div[@class='swiper-wrapper']//a[@id='mz-product-listing-image-39218404-0-3']//div[@class='carousel-item active']//img[@title='HP LP3065']",
+    )

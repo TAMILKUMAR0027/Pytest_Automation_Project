@@ -28,10 +28,6 @@ class WishListActions(BaseAction):
         super().__init__(driver)
         self.wishlist_page = WishListPage
 
-    # ------------------------------------------------------------------
-    # Navigation / scrolling
-    # ------------------------------------------------------------------
-
     def login_after_home(self):
         """After login, navigate back to the home page."""
         logger.info("Navigating to home page: %s", HOME_PAGE_URL)

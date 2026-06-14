@@ -57,3 +57,21 @@ class TestCart:
         assert cpa.quantity_update_check(q) is True
 
         logger.info("Test passed: Product quantity updated successfully")
+
+    def test_cart_product_remove(self, driver):
+        logger.info("Starting test: test_cartProduct_remove")
+
+        drv, wait = driver
+
+        logger.info("Clicking top collection product")
+        lp = LaunchActions(drv)
+        lp.click_top_collection_product()
+
+        logger.info("Adding product to cart")
+        pp = ProductPageAction(drv)
+        pp.click_add_to_cart()
+
+        logger.info("Opening cart page")
+        pp.click_view_cart()
+        cpa = CartPageAction(drv)
+        assert cpa.cart_removeProd_check() is True

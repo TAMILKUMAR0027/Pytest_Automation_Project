@@ -75,3 +75,38 @@ class TestRegister:
 
         assert rp.reg_fail_msg() is True
         logger.info("Invalid register failure message displayed successfully")
+
+    def test_WarningMsg_for_uncheck_pp(self, driver):
+        drv, wait = driver
+
+        logger.info("inValid register test started")
+
+        hp = HomePageAction(drv)
+        hp.click_myAcc()
+        logger.info("Clicked My Account")
+
+        lp = LoginPageAction(drv)
+        lp.click_register_continue()
+        logger.info("Clicked Register link")
+
+        rp = RegisterPageAction(drv)
+
+        fname = ConfigReader.get_register_data("fname")
+        lname = ConfigReader.get_register_data("lname")
+        telephone = ConfigReader.get_register_data("telephone")
+        password = ConfigReader.get_register_data("password")
+        cpassword = ConfigReader.get_register_data("cpassword")
+
+        logger.info("Valid register test data fetched from config file")
+
+        assert (
+            rp.enter_registerDetails_without_pp(
+                fname, lname, telephone, password, cpassword
+            )
+            is True
+        )
+        logger.info(
+            f"Entered valid register credentials for user: {fname} {lname} and uncheck Privacy policy and Warning Msg Thrown"
+        )
+
+        acpr = RegisterAccSuccessPageAction(drv)

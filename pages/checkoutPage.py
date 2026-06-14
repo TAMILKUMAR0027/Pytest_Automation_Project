@@ -9,14 +9,14 @@ class CheckoutPage:
     CART_PAGE_CHECKOUT_BTN = (By.XPATH, "//a[text()='Checkout']")
 
     # -------- Login --------
-    LOGIN_RADIO = (By.XPATH, "//label[contains(text(),'Login')]")
+    LOGIN_RADIO = (By.XPATH, "//label[@for='input-account-login']")
     LOGIN_EMAIL = (By.ID, "input-login-email")
     LOGIN_PASSWORD = (By.ID, "input-login-password")
     LOGIN_BUTTON = (By.XPATH, "//button[contains(text(),'Login')]")
 
     # -------- Register --------
     REGISTER_ACCOUNT_RADIO = (By.XPATH, "//label[@for='input-account-register']")
-    PRIVACY_LABEL = (By.XPATH, "//label[@for='input-account-agree']")
+    PRIVACY_LABEL = (By.XPATH, "//label[@for='input-agree']")
 
     REG_FIRST_NAME_INPUT = (By.ID, "input-payment-firstname")
     REG_LAST_NAME_INPUT = (By.ID, "input-payment-lastname")
@@ -39,7 +39,8 @@ class CheckoutPage:
     FLAT_RATE_LABEL = (By.XPATH, "//label[@for='input-shipping-method-flat.flat']")
     COD_LABEL = (By.XPATH, "//label[@for='input-payment-method-cod']")
     TERMS_LABEL = (By.XPATH, "//label[@for='input-agree']")
-    CONTINUE_CHECKOUT_BTN = (By.ID, "button-save")
+    CONTINUE_CHECKOUT_BTN = (By.XPATH, "//button[@id='button-save']")
+    ACCOUNT_PRIVACY_LABEL = (By.XPATH, "//label[@for='input-account-agree']")
 
     # -------- Assertions --------
     ORDER_CONFIRMATION_MSG = (By.XPATH, "//h1[contains(text(),'Your order has been placed')]")

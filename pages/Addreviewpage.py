@@ -11,7 +11,7 @@ class Addreviewpage(BasePage):
     reviewname=	(By.CSS_SELECTOR,"input#input-name")
     reviewtext=	(By.XPATH,"//div[@class='form-group required']/child::textarea")
     writeReview=(By.XPATH , "//button[text()='Write Review']")
-    successMessage=(By.XPATH,"//h5[@class='content-title mb-3']/following-sibling::div[1]")
+    successMessage=(By.XPATH,"//div[contains(@class,'alert-success')]")
     warningMessage =(By.XPATH,"//div[contains(@class,'alert-danger')]")
 	
 

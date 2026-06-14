@@ -1,0 +1,68 @@
+name: Release Workflow - Pytest Selenium
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Firefox
+        uses: browser-actions/setup-firefox@v1
+
+      - name: Verify Firefox
+        run: firefox --version
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Pytest - Firefox Headless
+        env:
+          CI: true
+          BROWSER: firefox
+          MODE: headless
+        run: |
+          pytest -v --html=reports/pytest-report.html --self-contained-html
+
+      - name: Upload Test Report Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pytest-html-report
+          path: reports/
+
+      - name: Generate Changelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        with:
+          configuration: ".github/release.yml"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            reports/pytest-report.html
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,6 +2,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from actions.BaseAction import BaseAction
+from pages.ProductPage import ProductPage
+from pages.HomePage import HomePage
 from pages.checkoutPage import CheckoutPage
 from utils.configReader import ConfigReader
 
@@ -11,19 +13,21 @@ class CheckoutAction(BaseAction):
     def __init__(self, driver):
         super().__init__(driver)
         self.cp = CheckoutPage()
+        self.hp=HomePage(driver)
+        self.pp=ProductPage(driver)
 
     # =========================
     # PRODUCT FLOW
     # =========================
 
     def click_hp_product(self):
-        self.click(self.cp.HP_PRODUCT_IMAGE)
+        self.click(self.hp.Hp_Product)
 
     def add_product_to_cart(self):
-        self.click(self.cp.PRODUCT_PAGE_CHECKOUT_BTN1)
+        self.click(self.pp.addToCart)
 
     def click_shopping_cart_from_popup(self):
-        self.click(self.cp.SHOPPING_CART_POPUP_LINK)
+        self.click(self.pp.viewCartbtn)
 
     def click_checkout_from_cart_page(self):
         self.click(self.cp.CART_PAGE_CHECKOUT_BTN)
@@ -31,6 +35,8 @@ class CheckoutAction(BaseAction):
     # =========================
     # LOGIN FLOW
     # =========================
+    def click_Login_Radio(self):
+        self.click(self.cp.LOGIN_RADIO)
 
     def login_from_checkout_page(self, email=None, password=None):
 
@@ -144,11 +150,20 @@ class CheckoutAction(BaseAction):
 
         self.driver.execute_script("arguments[0].scrollIntoView(true);", privacy)
         self.driver.execute_script("arguments[0].click();", privacy)
+    def agree_to_account_privacy_policy(self):
+
+        privacy = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable(self.cp.ACCOUNT_PRIVACY_LABEL)
+        )
+
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", privacy)
+        self.driver.execute_script("arguments[0].click();", privacy)
 
     # =========================
     # VALIDATIONS
     # =========================
-
+    def clickContinueCheckout(self):
+        self.click(self.cp.CONTINUE_CHECKOUT_BTN)
     def is_order_placed_successfully(self):
         return self.is_displayed(self.cp.ORDER_CONFIRMATION_MSG)
 

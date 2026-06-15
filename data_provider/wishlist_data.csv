@@ -1,1 +1,8 @@
-
+test_name,product_name,flow,operation,expected_page,expected_message
+test_add_single_product_to_wishlist,iMac,top_products,add,My Wish List,Success
+test_add_multiple_products_to_wishlist,Apple Cinema 30,top_collection,add,My Wish List,Success
+test_add_multiple_products_to_wishlist,iPod Nano,top_collection,add,My Wish List,Success
+test_add_product_via_search,iPod Shuffle,search,add,My Wish List,Success
+test_remove_single_product_from_wishlist,iMac,top_products,remove,My Wish List,Success
+test_remove_multiple_products_from_wishlist,Apple Cinema 30,top_collection,remove,My Wish List,Success
+test_remove_multiple_products_from_wishlist,iPod Nano,top_collection,remove,My Wish List,Success

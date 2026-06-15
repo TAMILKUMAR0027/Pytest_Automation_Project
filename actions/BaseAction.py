@@ -106,7 +106,6 @@ class BaseAction:
         Select(element).select_by_visible_text(text)
 
     def find_elements(self, locator):
-
         return self.wait.until(ec.presence_of_all_elements_located(locator))
 
     def clear(self, locator):

@@ -1,11 +1,21 @@
 from openpyxl import Workbook
 import openpyxl
+import os
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SEARCH_EXCEL_PATH = os.path.join(
+    BASE_DIR, "data_provider","searchProduct.xlsx"   
+)
+
+SEARCH_SHEET = "SearchData"
 
 
 def get_data(path, sheet_name):
     final_list = []
-    Workbook = openpyxl.load_workbook(path)
-    sheet = Workbook[sheet_name]
+    wb = openpyxl.load_workbook(path)
+    sheet = wb[sheet_name]
     total_row = sheet.max_row
     total_columns = sheet.max_column
 
@@ -22,17 +32,17 @@ def get_registration_data(path, sheet_name):
     sheet = wb[sheet_name]
 
     return {
-        "firstname": sheet.cell(2, 1).value,
-        "lastname": sheet.cell(2, 2).value,
-        "email": sheet.cell(2, 3).value,
-        "telephone": sheet.cell(2, 4).value,
-        "password": sheet.cell(2, 5).value,
+        "firstname":        sheet.cell(2, 1).value,
+        "lastname":         sheet.cell(2, 2).value,
+        "email":            sheet.cell(2, 3).value,
+        "telephone":        sheet.cell(2, 4).value,
+        "password":         sheet.cell(2, 5).value,
         "confirm_password": sheet.cell(2, 6).value,
-        "company": sheet.cell(2, 7).value,
-        "address1": sheet.cell(2, 8).value,
-        "address2": sheet.cell(2, 9).value,
-        "city": sheet.cell(2, 10).value,
-        "postcode": sheet.cell(2, 11).value,
-        "country": sheet.cell(2, 12).value,
-        "region": sheet.cell(2, 13).value
+        "company":          sheet.cell(2, 7).value,
+        "address1":         sheet.cell(2, 8).value,
+        "address2":         sheet.cell(2, 9).value,
+        "city":             sheet.cell(2, 10).value,
+        "postcode":         sheet.cell(2, 11).value,
+        "country":          sheet.cell(2, 12).value,
+        "region":           sheet.cell(2, 13).value,
     }

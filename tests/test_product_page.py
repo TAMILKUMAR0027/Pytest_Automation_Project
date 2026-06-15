@@ -22,7 +22,7 @@ class TestProductPage:
         ppa = ProductPageAction(drv)
 
         csv_path = r"E:\Pytest_Automation\data_provider\ProductDataInformation.csv"
-        data_list = CsvDataProvider.get_data(csv_path, None)
+        data_list = CsvDataProvider.get_csv_data(csv_path, None)
         data = data_list[0]
 
         hpa.click_HpProduct()
@@ -69,7 +69,7 @@ class TestProductPage:
         hpa = HomePageAction(drv)
         ppa = ProductPageAction(drv)
 
-        excel_path = r"E:\Pytest_Automation\data_provider\DataProvider.xlsx"
+        excel_path = "data_provider/DataProvider.xlsx"
         data_list = excelReader.get_data(excel_path, "EnquiryData")
         data = data_list[0]
 
@@ -103,7 +103,7 @@ class TestProductPage:
         hpa = HomePageAction(drv)
         ppa = ProductPageAction(drv)
 
-        excel_path = r"E:\Pytest_Automation\data_provider\DataProvider.xlsx"
+        excel_path = "data_provider/DataProvider.xlsx"
         data_list = excelReader.get_data(excel_path, "EnquiryData")
         data = data_list[0]
 

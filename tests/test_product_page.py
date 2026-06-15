@@ -22,7 +22,7 @@ class TestProductPage:
         ppa = ProductPageAction(drv)
 
         csv_path = r"E:\Pytest_Automation\data_provider\ProductDataInformation.csv"
-        data_list = CsvDataProvider.get_data(csv_path, None)
+        data_list = CsvDataProvider.get_csv_data(csv_path, None)
         data = data_list[0]
 
         hpa.click_HpProduct()

@@ -21,7 +21,7 @@ class TestProductPage:
         hpa = HomePageAction(drv)
         ppa = ProductPageAction(drv)
 
-        csv_path = r"E:\Pytest_Automation\data_provider\ProductDataInformation.csv"
+        csv_path ="data_provider/ProductDataInformation.csv"
         data_list = CsvDataProvider.get_csv_data(csv_path, None)
         data = data_list[0]
 

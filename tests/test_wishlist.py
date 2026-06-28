@@ -21,7 +21,6 @@ logger = get_logger(__name__)
 
 
 def log_csv_data(data):
-    """Log CSV row data."""
     logger.info("CSV test data loaded successfully")
 
     for key, value in data.items():

@@ -11,6 +11,8 @@ class TestHome:
     @pytest.mark.smoke
     @pytest.mark.Prasanna
     def test_homepage_verification(self, driver):
+
+        
         """
         Single comprehensive test for homepage.
         URL is automatically launched by the fixture.

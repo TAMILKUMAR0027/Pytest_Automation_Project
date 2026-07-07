@@ -17,3 +17,12 @@ class AccountPage(BasePage):
     telephoneEdit = (By.XPATH, "//input[@id='input-telephone']")
     editContinue = (By.XPATH, "//input[@value='Continue']")
     editSuccessMsg = (By.XPATH, "//div[@class='alert alert-success alert-dismissible']")
+    addressBook = (
+        By.XPATH,
+        "//a[@class='list-group-item'][normalize-space()='Address Book']",
+    )
+    deleteAddressBookBtn = (By.XPATH, "//tbody/tr[2]/td[2]/a[2]")
+    deleteAddressSuccessMessage = (
+        By.XPATH,
+        "//div[@class='alert alert-success alert-dismissible']",
+    )

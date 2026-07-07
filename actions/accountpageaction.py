@@ -28,3 +28,9 @@ class AccountPageAction(BaseAction):
         self.click(self.apa.editContinue)
         actual = self.get_text(self.apa.editSuccessMsg)
         return "Your account has been successfully updated." in actual
+
+    def deleteExistingAddress(self):
+        self.click(self.apa.addressBook)
+        self.click(self.apa.deleteAddressBookBtn)
+        actual = self.get_text(self.apa.deleteAddressSuccessMessage)
+        return "Your address has been successfully deleted" in actual

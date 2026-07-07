@@ -1,5 +1,5 @@
 from actions.BaseAction import BaseAction
-from pages.ComaprePage import ComparePage
+from pages.ComparePage import ComparePage
 
 
 class ProductCompareAction(BaseAction):

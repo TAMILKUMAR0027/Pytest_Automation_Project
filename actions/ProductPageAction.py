@@ -58,3 +58,8 @@ class ProductPageAction(BaseAction):
         return self.get_text(self.pp.softwareTitle)
     def get_EmptyCartMessage(self):
         return self.get_text(self.pp.emptyCartMessage)
+    def click_CompareButton(self):
+        self.click(self.pp.Compare_Button)
+
+    def get_CompareSuccessMessage(self):
+        return self.get_text(self.pp.Compare_Success_Message)

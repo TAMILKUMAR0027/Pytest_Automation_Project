@@ -33,3 +33,12 @@ class ProductPage(BasePage):
     softwareBreadcrumb = (By.XPATH, "//li[@class='breadcrumb-item']//a[contains(text(),'Software')]")
     softwareTitle = (By.XPATH, "//h1[@class='h4']")
     emptyCartMessage = (By.XPATH, "//div[@id='content']//p[contains(text(),'Your shopping cart is empty!')]")
+    Compare_Button = (
+    By.XPATH,
+    "//button[contains(text(),'Compare this Product')]"
+)
+
+Compare_Success_Message = (
+    By.XPATH,
+    "//p[contains(text(),'Success: You have added')]"
+)

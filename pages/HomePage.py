@@ -15,4 +15,8 @@ class HomePage(BasePage):
     )
     Hp_Product = By.XPATH, "//a[@id='mz-product-listing-image-39218404-0-3']//div[@class='carousel-item active']//img[@title='HP LP3065']"
     Compare_Link = By.XPATH, "(//a[contains(@href,'product/compare')])[2]"
+    Canon_Product = (
+    By.XPATH,
+    "//a[@id='mz-product-listing-image-39218404-0-0']//div[@class='carousel-item active']//img[@title='Canon EOS 5D']"
+)
     

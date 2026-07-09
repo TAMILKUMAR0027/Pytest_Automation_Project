@@ -20,3 +20,5 @@ class HomePageAction(BaseAction):
         self.click(self.hp.Hp_Product)
     def click_CompareLink(self):
         self.click(self.hp.Compare_Link)
+def click_CanonProduct(self):
+    self.click(self.hp.Canon_Product)

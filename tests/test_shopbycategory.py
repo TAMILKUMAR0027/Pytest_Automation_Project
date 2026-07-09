@@ -4,7 +4,7 @@ from utils.loggerCreator import get_logger
 
 logger = get_logger(__name__)
 
-@pytest.mark.ShopByCategory
+@pytest.mark.Samiha
 class TestShopByCategory:
 
     @pytest.mark.parametrize(

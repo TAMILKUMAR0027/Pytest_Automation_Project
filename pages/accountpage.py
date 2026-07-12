@@ -26,3 +26,6 @@ class AccountPage(BasePage):
         By.XPATH,
         "//div[@class='alert alert-success alert-dismissible']",
     )
+    rewardPointLink = (By.XPATH, "//a[text()=' Your Reward Points']")
+
+    assertRewardPoint = (By.XPATH, "//h1[text()='Your Reward Points']")

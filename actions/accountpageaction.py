@@ -34,3 +34,10 @@ class AccountPageAction(BaseAction):
         self.click(self.apa.deleteAddressBookBtn)
         actual = self.get_text(self.apa.deleteAddressSuccessMessage)
         return "Your address has been successfully deleted" in actual
+
+    def rewardPointsLinkClick(self):
+        self.click(self.apa.rewardPointLink)
+
+    def assertRewardPoitPageRedirection(self):
+        actual = self.get_text(self.apa.assertRewardPoint)
+        return "Your Reward Points" in actual

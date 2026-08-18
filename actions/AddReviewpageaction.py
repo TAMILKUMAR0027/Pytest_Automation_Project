@@ -21,3 +21,12 @@ class AddReviewpageaction(BaseAction):
         self.send_keys(self.arp.reviewtext,feedback)
     def clicksubmit(self):
         self.click(self.arp.writeReview)
+    def successmsg(self,expectedMessage):
+        actualMessage = self.get_text(self.arp.successMessage)
+        print(actualMessage)
+        assert expectedMessage in actualMessage
+    def warningmsg(self,expectedMessage):
+        actualMessage = self.get_text(self.arp.warningMessage)
+        print(actualMessage)
+        assert expectedMessage in actualMessage
+

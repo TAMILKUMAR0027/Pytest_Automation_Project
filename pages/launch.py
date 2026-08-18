@@ -15,8 +15,9 @@ class LaunchPages:
         "//div[@class='swiper-wrapper']//a[@id='mz-product-listing-image-39218404-0-3']//div[@class='carousel-item active']//img[@title='HP LP3065']",
     )
 
-    def __init__(self, driver):
+    def __init__(self, driver, wait):
         self.driver = driver
+        self.wait = wait
 
     def launch_application(self, url):
         """Launch the application."""

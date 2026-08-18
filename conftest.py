@@ -125,6 +125,7 @@ class DriverSetup:
         elif browser == "firefox":
 
             options = FirefoxOptions()
+            options.page_load_strategy = "eager"   # <-- add this
 
             if mode == "headless":
                 options.add_argument("--headless")

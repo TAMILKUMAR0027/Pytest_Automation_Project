@@ -16,9 +16,9 @@ EXPECTED_TITLE_KEYWORD = "Your Store"
 class LaunchActions(BaseAction):
     """High-level actions for validating the app launch / homepage."""
 
-    def __init__(self, driver):
+    def __init__(self, driver, wait):
         super().__init__(driver)
-        self.launch_page = LaunchPages(driver)
+        self.launch_page = LaunchPages(driver, wait)
 
     def verify_homepage(self):
         """Verify URL, title, and logo on the launched homepage."""
@@ -48,4 +48,4 @@ class LaunchActions(BaseAction):
         logger.info("All homepage verifications passed successfully!")
 
     def click_top_collection_product(self):
-        self.click(self.launch_page.topCollectionProduct)
+        self.click(self.launch_page.TOP_COLLECTION_PRODUCT)

@@ -15,8 +15,8 @@ class TestHome:
         Single comprehensive test for homepage.
         URL is automatically launched by the fixture.
         """
-        drv, wait = driver         
-        lp = LaunchPages(drv)
+        drv, wait = driver
+        lp = LaunchPages(drv, wait)
 
         url = ConfigReader.get_url()
 
@@ -42,4 +42,4 @@ class TestHome:
         logger.info("Logo displayed: %s", logo_displayed)
         assert logo_displayed, "Logo is NOT displayed on the homepage"
 
-        logger.info(" All homepage verifications passed successfully!") 
+        logger.info("All homepage verifications passed successfully!")

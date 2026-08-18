@@ -26,7 +26,6 @@ def log_csv_data(data):
     for key, value in data.items():
         logger.info("%s = %s", key, value)
 
-
 @pytest.fixture
 def setup(driver):
     """Log in and return driver, wait, and wishlist actions."""

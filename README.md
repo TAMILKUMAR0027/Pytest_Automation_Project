@@ -136,6 +136,7 @@ pytest tests/test_launch.py -v
 ```bash
 pytest -m smoke
 pytest -m regression
+pytest -m Prasanna
 pytest -m sanity
 pytest -m "sanity and regression"
 ```
